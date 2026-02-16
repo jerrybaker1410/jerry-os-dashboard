@@ -1,0 +1,2380 @@
+{
+  "sessions": {
+    "path": "/Users/demetripanici/.openclaw/agents/main/sessions/sessions.json",
+    "count": 9,
+    "activeMinutes": null,
+    "sessions": [
+      {
+        "key": "agent:main:main",
+        "kind": "direct",
+        "updatedAt": 1771267056001,
+        "ageMs": 40465,
+        "sessionId": "1ecb362f-e11d-4ef1-8589-354a4f6ecca8",
+        "systemSent": true,
+        "abortedLastRun": false,
+        "inputTokens": 58719,
+        "outputTokens": 732,
+        "totalTokens": 72930,
+        "totalTokensFresh": true,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 2000000
+      },
+      {
+        "key": "agent:main:subagent:04e3fb04-78de-4695-9949-eb80d96c9089",
+        "kind": "direct",
+        "updatedAt": 1771266620097,
+        "ageMs": 476369,
+        "sessionId": "7f73c141-5d09-4a05-a11f-70be4351bad0",
+        "totalTokens": null,
+        "totalTokensFresh": false,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 200000
+      },
+      {
+        "key": "agent:main:subagent:e27077e9-85a9-4c5d-856f-516d4d83bc75",
+        "kind": "direct",
+        "updatedAt": 1771266491045,
+        "ageMs": 605421,
+        "sessionId": "ad4d9121-690a-4e2a-9ade-bdbb2eec3725",
+        "abortedLastRun": false,
+        "inputTokens": 42443,
+        "outputTokens": 5420,
+        "totalTokens": 24305,
+        "totalTokensFresh": true,
+        "model": "anthropic/claude-opus-4.6",
+        "contextTokens": 1000000
+      },
+      {
+        "key": "agent:main:cron:35d2b614-ee13-4ca7-970b-2ffb9ba69078",
+        "kind": "direct",
+        "updatedAt": 1771264800154,
+        "ageMs": 2296312,
+        "sessionId": "594fa623-5094-4751-9b4f-7191b5bd0e8b",
+        "systemSent": true,
+        "totalTokens": null,
+        "totalTokensFresh": false,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 200000
+      },
+      {
+        "key": "agent:main:cron:35d2b614-ee13-4ca7-970b-2ffb9ba69078:run:594fa623-5094-4751-9b4f-7191b5bd0e8b",
+        "kind": "direct",
+        "updatedAt": 1771264800154,
+        "ageMs": 2296312,
+        "sessionId": "594fa623-5094-4751-9b4f-7191b5bd0e8b",
+        "systemSent": true,
+        "totalTokens": null,
+        "totalTokensFresh": false,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 200000
+      },
+      {
+        "key": "agent:main:cron:f3d1c1ce-2583-400a-89e3-5567f2711598",
+        "kind": "direct",
+        "updatedAt": 1771261200109,
+        "ageMs": 5896357,
+        "sessionId": "d30720d0-dc44-4c55-9052-7a81819b358a",
+        "systemSent": true,
+        "totalTokens": null,
+        "totalTokensFresh": false,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 200000
+      },
+      {
+        "key": "agent:main:cron:f3d1c1ce-2583-400a-89e3-5567f2711598:run:d30720d0-dc44-4c55-9052-7a81819b358a",
+        "kind": "direct",
+        "updatedAt": 1771261200109,
+        "ageMs": 5896357,
+        "sessionId": "d30720d0-dc44-4c55-9052-7a81819b358a",
+        "systemSent": true,
+        "totalTokens": null,
+        "totalTokensFresh": false,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 200000
+      },
+      {
+        "key": "agent:main:cron:1a700dcc-2b30-4749-9ccb-0fdab5a96ba5",
+        "kind": "direct",
+        "updatedAt": 1771257600070,
+        "ageMs": 9496396,
+        "sessionId": "bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+        "systemSent": true,
+        "totalTokens": null,
+        "totalTokensFresh": false,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 200000
+      },
+      {
+        "key": "agent:main:cron:1a700dcc-2b30-4749-9ccb-0fdab5a96ba5:run:bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+        "kind": "direct",
+        "updatedAt": 1771257600070,
+        "ageMs": 9496396,
+        "sessionId": "bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+        "systemSent": true,
+        "totalTokens": null,
+        "totalTokensFresh": false,
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 200000
+      }
+    ]
+  },
+  "cronList": {
+    "jobs": [
+      {
+        "id": "a25b4f12-87ed-451c-8636-13476d112c81",
+        "agentId": "openclaw-builder",
+        "name": "Hourly System Backup to Google Drive",
+        "enabled": true,
+        "createdAtMs": 1771230868648,
+        "updatedAtMs": 1771230868648,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 * * * *",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Run the backup script: bash /Users/demetripanici/.openclaw/workspace/scripts/backup-to-gdrive.sh — Report the backup name, location, and size. If it fails, report the error.",
+          "timeoutSeconds": 120
+        },
+        "delivery": {
+          "mode": "none"
+        },
+        "state": {
+          "nextRunAtMs": 1771268400000
+        }
+      },
+      {
+        "id": "99a9d684-58f5-43a6-809e-86b9c9709b26",
+        "name": "Weekly Podcast Episode Mining",
+        "enabled": true,
+        "createdAtMs": 1771228792702,
+        "updatedAtMs": 1771228792702,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 14 * * 1",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Podcast episode mining. Read /Users/demetripanici/.agents/skills/podcast-clip-miner/SKILL.md. Mine latest AI Agents Podcast episodes for building blocks: paradoxes, quotes, problems, arcs. Output 9 building block categories + content ideas. Save to /Users/demetripanici/.openclaw/workspace/output/episode-mining-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771272000000
+        }
+      },
+      {
+        "id": "a395b13f-3551-444d-9e01-e4c8f84a885c",
+        "name": "Daily B-Roll Suggestions",
+        "enabled": true,
+        "createdAtMs": 1771228908390,
+        "updatedAtMs": 1771228908390,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 15 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "B-roll suggestions. Read /Users/demetripanici/.agents/skills/broll-brian/SKILL.md. Check for upcoming video scripts in /Users/demetripanici/.openclaw/workspace/output/. Generate specific B-roll footage suggestions with AI image generator prompts. Save to /Users/demetripanici/.openclaw/workspace/output/broll-suggestions-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771275600000
+        }
+      },
+      {
+        "id": "ff4a1f6f-c818-4f9f-a037-a3c706a11152",
+        "name": "Daily Content Scheduler",
+        "enabled": true,
+        "createdAtMs": 1771228798671,
+        "updatedAtMs": 1771228798671,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 16 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Content scheduler run. Read /Users/demetripanici/.agents/skills/contentstudio-scheduler/SKILL.md. Queue approved content from /Users/demetripanici/.openclaw/workspace/output/ for publication. Check platform-specific char limits and optimal posting times. Save schedule to /Users/demetripanici/.openclaw/workspace/output/content-schedule-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771279200000
+        }
+      },
+      {
+        "id": "35d2b614-ee13-4ca7-970b-2ffb9ba69078",
+        "name": "Dashboard Data Refresh (3x daily)",
+        "enabled": true,
+        "createdAtMs": 1771228928601,
+        "updatedAtMs": 1771245357415,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 7,12,17 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Dashboard data refresh. Count current cron jobs, check agent health, log to /Users/demetripanici/.openclaw/workspace/output/dashboard-data.json with timestamp, cron count, agent status.",
+          "timeoutSeconds": 60
+        },
+        "delivery": {
+          "mode": "none",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771282800000
+        }
+      },
+      {
+        "id": "7826954b-3c3b-4aa4-bfb7-813c0c7b8240",
+        "agentId": "main",
+        "name": "Daily Grain Meeting Processor",
+        "enabled": true,
+        "createdAtMs": 1771226257335,
+        "updatedAtMs": 1771226257335,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 18 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Grain Task Orchestrator run. Use mcporter to call grain.list_attended_meetings to find meetings from today. For each meeting, fetch transcript via grain.fetch_meeting_transcript and notes via grain.fetch_meeting_notes. Extract action items and create Todoist tasks using mcporter todoist.add-tasks. Follow the methodology in /Users/demetripanici/.agents/skills/grain-task-orchestrator/SKILL.md. Map speakers to team members where possible. Only process meetings from today.",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771286400000
+        }
+      },
+      {
+        "id": "acfbd024-ae8a-4cd8-af24-4fad08bc2547",
+        "name": "Recursive Improvement Analysis",
+        "enabled": true,
+        "createdAtMs": 1771228800005,
+        "updatedAtMs": 1771228800005,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 23 * * *",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Nightly improvement analysis. Read /Users/demetripanici/.agents/skills/recursive-improvement-protocol/SKILL.md. Review today's agent activity: cron job success/failure rates, task completion, cost tracking. Identify top 3 improvement opportunities. Save proposals to /Users/demetripanici/.openclaw/workspace/output/improvement-analysis-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771304400000
+        }
+      },
+      {
+        "id": "29e86235-9b57-46e1-a794-447301ef60f1",
+        "agentId": "openclaw-builder",
+        "name": "Model Monitor (Builder)",
+        "enabled": true,
+        "createdAtMs": 1771228799335,
+        "updatedAtMs": 1771228799335,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 2 * * *",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Model monitor run. Check OpenRouter for new or updated AI models. Compare against current model ladder (Grok 4.1 Fast, Gemini 3 Pro, Sonnet 4.5, Opus 4.6). If better options exist, generate a config.patch proposal. Check pricing changes. Save findings to /Users/demetripanici/.openclaw/workspace-openclaw-builder/memory/model-updates-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771315200000
+        }
+      },
+      {
+        "id": "0b2ec3d3-ade8-42c5-ad99-9b0c851450f9",
+        "name": "Recursive Improvement Apply",
+        "enabled": true,
+        "createdAtMs": 1771228902560,
+        "updatedAtMs": 1771245434948,
+        "schedule": {
+          "kind": "cron",
+          "expr": "35 6 * * *",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Morning improvement apply. Read /Users/demetripanici/.agents/skills/recursive-improvement-protocol/SKILL.md. Check /Users/demetripanici/.openclaw/workspace/output/ for last night's improvement-analysis file. Review proposals and apply any that are low-risk and high-impact. Update MEMORY.md with changes made. Save log to /Users/demetripanici/.openclaw/workspace/output/improvement-apply-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771331700000,
+          "lastRunAtMs": 1771245300022,
+          "lastStatus": "ok",
+          "lastDurationMs": 134926,
+          "consecutiveErrors": 0
+        }
+      },
+      {
+        "id": "ba9abdb3-9000-467a-a2ae-115ef9349f67",
+        "agentId": "main",
+        "name": "Daily Trend Scout",
+        "enabled": true,
+        "createdAtMs": 1771226257316,
+        "updatedAtMs": 1771226257316,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 7 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Trend Scout daily run. Search for today's top AI news using web_search. Filter through Rise Productive's lens: practical automation, enterprise AI, agent frameworks, workflow tools. Skip consumer AI, art drama, AGI speculation. Read /Users/demetripanici/.agents/skills/idea-irving/SKILL.md and /Users/demetripanici/.agents/skills/creator-trend-tracker/SKILL.md for methodology. Output 3-5 content opportunities with headlines, angles, and hooks. Save to /Users/demetripanici/.openclaw/workspace/output/trend-scan-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771333200000
+        }
+      },
+      {
+        "id": "f0d949e5-f4b4-43e3-802b-ebbcd6166876",
+        "agentId": "main",
+        "name": "Daily Social Writer",
+        "enabled": true,
+        "createdAtMs": 1771226257322,
+        "updatedAtMs": 1771226257322,
+        "schedule": {
+          "kind": "cron",
+          "expr": "30 7 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Social Writer daily run. Read today's trend scan at /Users/demetripanici/.openclaw/workspace/output/ (latest trend-scan file). Pick the best content opportunity and write ONE LinkedIn post in Demetri Panici's voice. Read these skills: /Users/demetripanici/.agents/skills/copywriting-cam/SKILL.md, /Users/demetripanici/.agents/skills/person-pete/references/blacklist.md, /Users/demetripanici/.agents/skills/hook-harry/SKILL.md, /Users/demetripanici/.agents/skills/work-worth-doing/SKILL.md. Run full blacklist check, self-score, iterate if below 7. Save to /Users/demetripanici/.openclaw/workspace/output/linkedin-post-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771335000000
+        }
+      },
+      {
+        "id": "80e055e5-c0aa-42dd-a4d0-e50a0aea855f",
+        "agentId": "main",
+        "name": "Morning Briefing",
+        "enabled": true,
+        "createdAtMs": 1771225915002,
+        "updatedAtMs": 1771225915002,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 8 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Morning briefing for Demetri. Pull today's Todoist tasks across all team projects (Internal Content, External Content, AI Consulting, Paid Ads, Rise Operations, Sales & Growth). Summarize what's due today, flag overdue items, note any P1/P2 priorities. Keep it concise — bullet points, no fluff. Use mcporter call todoist.find-tasks-by-date with startDate=today.",
+          "timeoutSeconds": 120
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771336800000
+        }
+      },
+      {
+        "id": "d30cb419-3c10-4395-bddc-3d4ec256cfe5",
+        "name": "Daily CRM Review",
+        "enabled": true,
+        "createdAtMs": 1771228789347,
+        "updatedAtMs": 1771228789347,
+        "schedule": {
+          "kind": "cron",
+          "expr": "30 8 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Daily CRM review. Read /Users/demetripanici/.agents/skills/daily-crm-orchestrator/SKILL.md. Review pipeline across Instantly and LinkedIn. Flag stale leads, suggest next actions. Save to /Users/demetripanici/.openclaw/workspace/output/crm-review-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771338600000
+        }
+      },
+      {
+        "id": "5097c829-c5c9-47fe-b56e-07b6e93380bd",
+        "agentId": "main",
+        "name": "Tue/Thu Shorts Script",
+        "enabled": true,
+        "createdAtMs": 1771226257326,
+        "updatedAtMs": 1771226257326,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 9 * * 2,4",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Shorts Scripter run. Write ONE YouTube Shorts script (30-45 sec). Search for a trending AI topic, then read /Users/demetripanici/.agents/skills/shorts-hook-looper/SKILL.md and /Users/demetripanici/.agents/skills/funny-fran/SKILL.md. Write with: hook (first 2 sec pattern interrupt), body (insight), loop point (makes viewer rewatch). Run through /Users/demetripanici/.agents/skills/person-pete/references/blacklist.md. Self-score 1-10. Save to /Users/demetripanici/.openclaw/workspace/output/shorts-script-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771340400000
+        }
+      },
+      {
+        "id": "f5f9aac3-2c4a-4359-9e3b-94dcf651120f",
+        "agentId": "main",
+        "name": "Paid Media Daily Checks",
+        "enabled": true,
+        "createdAtMs": 1771227355906,
+        "updatedAtMs": 1771227355906,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 9 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Paid Ads Monitor daily run. Read /Users/demetripanici/.agents/skills/paid-ads-reporting/SKILL.md. Check ad spend, performance metrics, budget pacing across all active campaigns (Arcade.dev Google/LinkedIn/Meta, Melanie). Flag anomalies (spend >120% of daily budget, CTR drops >20%, CPC spikes). Output a summary with: total spend today, performance by client, any flags. Save to /Users/demetripanici/.openclaw/workspace/output/paid-ads-check-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771340400000
+        }
+      },
+      {
+        "id": "39a0d850-5152-44b6-bf59-582cee50bc91",
+        "name": "Daily Sponsor Inbox",
+        "enabled": true,
+        "createdAtMs": 1771228792031,
+        "updatedAtMs": 1771228792031,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 9 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Sponsor inbox check. Read /Users/demetripanici/.agents/skills/sponsor-management/SKILL.md. Check hello@riseproductive.com for sponsor inquiries, track billing status, flag upsell opportunities. Save to /Users/demetripanici/.openclaw/workspace/output/sponsor-inbox-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771340400000
+        }
+      },
+      {
+        "id": "c2b02eff-7603-4743-b258-c23f7ef5bfa9",
+        "name": "Daily Podcast Inbox",
+        "enabled": true,
+        "createdAtMs": 1771228790701,
+        "updatedAtMs": 1771228790701,
+        "schedule": {
+          "kind": "cron",
+          "expr": "30 9 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Podcast inbox check. Read /Users/demetripanici/.agents/skills/ai-agents-podcast-ops/SKILL.md. Check for new guest inquiries, qualify against criteria (must deliver AI-related services). Save to /Users/demetripanici/.openclaw/workspace/output/podcast-inbox-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771342200000
+        }
+      },
+      {
+        "id": "1a700dcc-2b30-4749-9ccb-0fdab5a96ba5",
+        "name": "Daily LinkedIn Engagement",
+        "enabled": true,
+        "createdAtMs": 1771228790018,
+        "updatedAtMs": 1771228790018,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "LinkedIn engagement run. Read /Users/demetripanici/.agents/skills/influencer-monitor/SKILL.md. Find high-value posts to engage with. Draft 3-5 thoughtful comments in Demetri's voice. Save to /Users/demetripanici/.openclaw/workspace/output/linkedin-engagement-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771344000000
+        }
+      },
+      {
+        "id": "1f470972-d772-466a-a99f-62139c4ed112",
+        "name": "Weekly LinkedIn Connection Review",
+        "enabled": true,
+        "createdAtMs": 1771228793360,
+        "updatedAtMs": 1771228793360,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 * * 2",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "LinkedIn connection review. Read /Users/demetripanici/.agents/skills/linkedin-connection-qualifier/SKILL.md. Review pending connection requests, score for client potential and strategic value. Save to /Users/demetripanici/.openclaw/workspace/output/linkedin-connections-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771344000000
+        }
+      },
+      {
+        "id": "f3d1c1ce-2583-400a-89e3-5567f2711598",
+        "name": "Daily Outreach Monitor",
+        "enabled": true,
+        "createdAtMs": 1771228791368,
+        "updatedAtMs": 1771228791368,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 11 * * 1-5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Outreach monitor run. Read /Users/demetripanici/.agents/skills/outreach-orchestrator/SKILL.md. Check Instantly campaign status, flag replies needing attention, monitor bounce rates. Save to /Users/demetripanici/.openclaw/workspace/output/outreach-monitor-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771347600000
+        }
+      },
+      {
+        "id": "88e99d9c-8fd5-4055-aba1-25f0cc2d9173",
+        "name": "Weekly Graphics Generation",
+        "enabled": true,
+        "createdAtMs": 1771228796026,
+        "updatedAtMs": 1771228796026,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 14 * * 2",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Social graphics generation. Read /Users/demetripanici/.agents/skills/rise-visuals/SKILL.md. Generate social media graphics for the week's planned content. Use typography-first design system. Save concepts to /Users/demetripanici/.openclaw/workspace/output/graphics-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771358400000
+        }
+      },
+      {
+        "id": "020c1f4e-0a3a-4353-bf84-0e97ed571462",
+        "agentId": "main",
+        "name": "Wed Blog Draft",
+        "enabled": true,
+        "createdAtMs": 1771226257330,
+        "updatedAtMs": 1771226257330,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 * * 3",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Blog Writer weekly run. Read /Users/demetripanici/.agents/skills/rise-blog/SKILL.md for the 14-category QA methodology. Pick a topic from the week's trend scans in /Users/demetripanici/.openclaw/workspace/output/. Write a 1000-1500 word blog post in Demetri's voice. Run through /Users/demetripanici/.agents/skills/person-pete/references/blacklist.md. Include SEO meta description. Save to /Users/demetripanici/.openclaw/workspace/output/blog-draft-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771430400000
+        }
+      },
+      {
+        "id": "5e0199c7-9088-4637-a6d5-f01a62750179",
+        "agentId": "main",
+        "name": "Wed/Fri Thumbnail Generation",
+        "enabled": true,
+        "createdAtMs": 1771227355921,
+        "updatedAtMs": 1771227355921,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 * * 3,5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Thumbnail Designer run. Read /Users/demetripanici/.agents/skills/rise-youtube-thumbnails/SKILL.md. Research the latest video topic from the trend scans in /Users/demetripanici/.openclaw/workspace/output/. Analyze competitor thumbnails. Generate thumbnail concept with: text overlay suggestion, color scheme, composition notes, expression/pose guidance for Demetri. If mcp-image is available via mcporter, generate an actual thumbnail image. Save to /Users/demetripanici/.openclaw/workspace/output/thumbnail-concept-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771430400000
+        }
+      },
+      {
+        "id": "6ecf3898-a63b-4a4e-b8d9-da129f44f351",
+        "agentId": "main",
+        "name": "YouTube Comment Response",
+        "enabled": true,
+        "createdAtMs": 1771227355915,
+        "updatedAtMs": 1771227355915,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 11 * * 3",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "YouTube Comment Responder. Read /Users/demetripanici/.agents/skills/influencer-monitor/SKILL.md. Check Rise Productive YouTube channel for recent comments. Draft engagement-optimized replies in Demetri's voice (direct, kind, helpful — not corporate). Prioritize: questions, thoughtful comments, potential leads. Skip: spam, generic 'great video'. Output drafted replies to /Users/demetripanici/.openclaw/workspace/output/youtube-comments-YYYY-MM-DD.md for Demetri to review before posting.",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771434000000
+        }
+      },
+      {
+        "id": "baf683e6-7bd4-43d8-9ba4-ccdf16ac0af8",
+        "name": "Weekly Podcast Guest Outreach",
+        "enabled": true,
+        "createdAtMs": 1771228794687,
+        "updatedAtMs": 1771228794687,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 14 * * 3",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Podcast guest outreach. Read /Users/demetripanici/.agents/skills/outreach-orchestrator/SKILL.md in podcast mode. Find potential AI Agents Podcast guests. Research backgrounds, draft outreach messages. Save to /Users/demetripanici/.openclaw/workspace/output/guest-outreach-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771444800000
+        }
+      },
+      {
+        "id": "58671aad-212d-460e-bb63-2a24dbec9c5e",
+        "name": "Weekly SEO Blog Review",
+        "enabled": true,
+        "createdAtMs": 1771228796686,
+        "updatedAtMs": 1771228796686,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 * * 4",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "SEO blog review. Read /Users/demetripanici/.agents/skills/rise-blog/SKILL.md. Review recently published blogs for SEO improvements: meta descriptions, keyword density, internal linking opportunities. Save to /Users/demetripanici/.openclaw/workspace/output/seo-review-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771516800000
+        }
+      },
+      {
+        "id": "499e2cd4-b98d-4719-9fdb-0c68035e38c3",
+        "name": "Weekly Clip Extraction",
+        "enabled": true,
+        "createdAtMs": 1771228913283,
+        "updatedAtMs": 1771228913283,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 14 * * 4",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Clip extraction run. Read /Users/demetripanici/.agents/skills/clip-catcher/SKILL.md. Find best 30-90s clips from recent long-form content. Score using 4-factor system (standalone clarity, hook strength, emotional intensity, actionability). Save to /Users/demetripanici/.openclaw/workspace/output/clip-extraction-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771531200000
+        }
+      },
+      {
+        "id": "37769639-d7c8-481f-b6fa-da496110ed11",
+        "name": "Weekly Todoist Hygiene Audit",
+        "enabled": true,
+        "createdAtMs": 1771228798008,
+        "updatedAtMs": 1771228798008,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 9 * * 5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Todoist hygiene audit. Read /Users/demetripanici/.agents/skills/todoist-project-manager/SKILL.md. Audit all team projects for: stale tasks (>7 days no update), missing descriptions, overdue items, unassigned tasks. Save to /Users/demetripanici/.openclaw/workspace/output/todoist-audit-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771599600000
+        }
+      },
+      {
+        "id": "05c2bb63-cfcb-4538-b258-f26b0de7b83d",
+        "name": "Weekly Client Upsell Check",
+        "enabled": true,
+        "createdAtMs": 1771228794022,
+        "updatedAtMs": 1771228794022,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 * * 5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Client upsell check. Read /Users/demetripanici/.agents/skills/ai-hormozi/SKILL.md. Review active clients (Arcade.dev, Jotform, Melanie) for upsell opportunities. Use Hormozi methodology for value-based proposals. Save to /Users/demetripanici/.openclaw/workspace/output/upsell-check-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771603200000
+        }
+      },
+      {
+        "id": "f6f06866-199c-476a-b747-98c93bff3968",
+        "name": "Weekly Meeting Content Mining",
+        "enabled": true,
+        "createdAtMs": 1771228923816,
+        "updatedAtMs": 1771228923816,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 11 * * 5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Meeting content mining. Read /Users/demetripanici/.agents/skills/meeting-clip-miner/SKILL.md. Use Grain MCP to fetch this week's meeting transcripts. Extract building blocks: paradoxes, client problems, success stories, quotable moments. Save to /Users/demetripanici/.openclaw/workspace/output/meeting-mining-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771606800000
+        }
+      },
+      {
+        "id": "22d88d89-aa21-4120-8466-aa43ff3361a7",
+        "name": "Weekly Ad Performance Report",
+        "enabled": true,
+        "createdAtMs": 1771228918890,
+        "updatedAtMs": 1771228918890,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 14 * * 5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Ad performance report. Read /Users/demetripanici/.agents/skills/paid-ads-reporting/SKILL.md. Generate weekly performance reports for all active ad campaigns (Arcade.dev Google/LinkedIn/Meta, Melanie). Include spend, conversions, CPA, ROAS. Save to /Users/demetripanici/.openclaw/workspace/output/ad-report-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771617600000
+        }
+      },
+      {
+        "id": "13ab9d3d-c32f-41da-9f14-7b3e3d1d85fe",
+        "agentId": "main",
+        "name": "Friday Improvement Review",
+        "enabled": true,
+        "createdAtMs": 1771225915012,
+        "updatedAtMs": 1771225915012,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 17 * * 5",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Friday improvement review. Read /Users/demetripanici/.agents/skills/recursive-improvement-protocol/SKILL.md. Review the week's agent activity: check what tasks were completed in Jerry's World Todoist project (6g26XRJq6hmwpvCq), identify any blocked items, and propose improvements. Write a summary to /Users/demetripanici/.openclaw/workspace/memory/weekly-review-YYYY-WW.md. Keep it actionable — what worked, what didn't, what to change next week.",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771628400000
+        }
+      },
+      {
+        "id": "fa064032-32f9-45f9-80b9-940f1835f6a7",
+        "name": "Weekly Content Calendar",
+        "enabled": true,
+        "createdAtMs": 1771228795362,
+        "updatedAtMs": 1771228795362,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 8 * * 1",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Weekly content calendar planning. Read /Users/demetripanici/.agents/skills/content-orchestrator/SKILL.md. Plan the week's content across LinkedIn, Twitter, YouTube, blog, newsletter. Map content to trend scans from /Users/demetripanici/.openclaw/workspace/output/. Save to /Users/demetripanici/.openclaw/workspace/output/content-calendar-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771855200000
+        }
+      },
+      {
+        "id": "8754fd6a-27c5-4c0f-a8fb-a1dfb15ed4ed",
+        "agentId": "main",
+        "name": "Weekly AI Newsletter Research",
+        "enabled": true,
+        "createdAtMs": 1771225915008,
+        "updatedAtMs": 1771225915008,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 9 * * 1",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Run the weekly AI newsletter research for Rise Productive. 1) Search for the top 5 AI news stories from the past week using web_search. 2) Read the skill file at /Users/demetripanici/.agents/skills/ai-weekly-newsletter/SKILL.md for methodology. 3) Filter stories through Demetri's 'Work Worth Doing' lens — focus on practical AI automation, not hype. 4) Output a structured newsletter draft with: headline, 3-5 stories with Demetri-voice commentary, and a video outline suggestion. Save to /Users/demetripanici/.openclaw/workspace/output/newsletter-draft-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1771858800000
+        }
+      },
+      {
+        "id": "4945d82e-e58b-4733-bf4d-d81eac33a5a7",
+        "name": "Weekly Influencer Scan",
+        "enabled": true,
+        "createdAtMs": 1771228934209,
+        "updatedAtMs": 1771228934209,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 11 * * 1",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Deep influencer scan. Read /Users/demetripanici/.agents/skills/influencer-monitor/SKILL.md. Scan all 23 tracked influencers across LinkedIn, Twitter, YouTube. Score content with 4-factor system. Identify content gaps and trending topics. Save to /Users/demetripanici/.openclaw/workspace/output/influencer-scan-YYYY-MM-DD.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1771866000000
+        }
+      },
+      {
+        "id": "80a098ae-1bf3-4533-b896-7f2051240994",
+        "agentId": "main",
+        "name": "Monthly Lead Magnet Creation",
+        "enabled": true,
+        "createdAtMs": 1771227355926,
+        "updatedAtMs": 1771227355926,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 1 * *",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Lead Magnet Creator monthly run. Read /Users/demetripanici/.agents/skills/content-orchestrator/SKILL.md. Create a new lead magnet concept for Rise Productive. This month's angle should come from the most popular content topics of the past 30 days (check trend scans in output/). Output: title, outline (5-7 sections), target audience, distribution plan, landing page copy draft. Save to /Users/demetripanici/.openclaw/workspace/output/lead-magnet-YYYY-MM.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce"
+        },
+        "state": {
+          "nextRunAtMs": 1772380800000
+        }
+      },
+      {
+        "id": "faa7ec09-12b0-42b0-8b6a-dcc8379dd01c",
+        "name": "Bi-weekly Ad Copy Refresh",
+        "enabled": true,
+        "createdAtMs": 1771228797348,
+        "updatedAtMs": 1771228797348,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 10 1,15 * *",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Ad copy refresh. Read /Users/demetripanici/.agents/skills/paid-ads-copywriting/SKILL.md. Review active ad campaigns for Arcade.dev and Melanie. Draft refreshed ad copy variants. Save to /Users/demetripanici/.openclaw/workspace/output/ad-copy-refresh-YYYY-MM-DD.md",
+          "timeoutSeconds": 180
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1772380800000
+        }
+      },
+      {
+        "id": "b61ce0ca-1309-4a23-98f0-3a61d24a5ef7",
+        "name": "Monthly Client ROI Report",
+        "enabled": true,
+        "createdAtMs": 1771228938945,
+        "updatedAtMs": 1771228938945,
+        "schedule": {
+          "kind": "cron",
+          "expr": "0 14 1 * *",
+          "tz": "America/Chicago"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Monthly client ROI report. Read /Users/demetripanici/.agents/skills/paid-ads-reporting/SKILL.md. Generate comprehensive monthly ROI reports for all active clients (Arcade.dev, Jotform, Melanie). Include month-over-month trends, recommendations. Save to /Users/demetripanici/.openclaw/workspace/output/monthly-roi-YYYY-MM.md",
+          "timeoutSeconds": 300
+        },
+        "delivery": {
+          "mode": "announce",
+          "channel": "last"
+        },
+        "state": {
+          "nextRunAtMs": 1772395200000
+        }
+      }
+    ]
+  },
+  "cronStatus": {
+    "enabled": true,
+    "storePath": "/Users/demetripanici/.openclaw/cron/jobs.json",
+    "jobs": 39,
+    "nextWakeAtMs": 1771268400000
+  },
+  "status": {
+    "heartbeat": {
+      "defaultAgentId": "main",
+      "agents": [
+        {
+          "agentId": "main",
+          "enabled": true,
+          "every": "30m",
+          "everyMs": 1800000
+        },
+        {
+          "agentId": "account-manager",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "ads-monitor",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "ads-strategist",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "blog-writer",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "broll-producer",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "content-qa",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "content-scheduler",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "crm-agent",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "delivery-pm",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "episode-miner",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "graphics-designer",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "guest-booker",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "lead-qualifier",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "linkedin-agent",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "newsletter-writer",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "openclaw-builder",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "outreach-agent",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "podcast-inbox",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "project-manager",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "shorts-scripter",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "social-writer",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "solution-architect",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "thumbnail-designer",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        },
+        {
+          "agentId": "trend-scout",
+          "enabled": false,
+          "every": "disabled",
+          "everyMs": null
+        }
+      ]
+    },
+    "channelSummary": [
+      "Telegram: configured",
+      "  - default (token:config)"
+    ],
+    "queuedSystemEvents": [],
+    "sessions": {
+      "paths": [
+        "/Users/demetripanici/.openclaw/agents/main/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/account-manager/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/ads-monitor/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/ads-strategist/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/blog-writer/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/broll-producer/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/content-qa/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/content-scheduler/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/crm-agent/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/delivery-pm/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/episode-miner/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/graphics-designer/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/guest-booker/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/lead-qualifier/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/linkedin-agent/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/newsletter-writer/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/openclaw-builder/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/outreach-agent/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/podcast-inbox/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/project-manager/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/shorts-scripter/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/social-writer/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/solution-architect/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/thumbnail-designer/sessions/sessions.json",
+        "/Users/demetripanici/.openclaw/agents/trend-scout/sessions/sessions.json"
+      ],
+      "count": 36,
+      "defaults": {
+        "model": "x-ai/grok-4.1-fast",
+        "contextTokens": 2000000
+      },
+      "recent": [
+        {
+          "agentId": "main",
+          "key": "agent:main:main",
+          "kind": "direct",
+          "sessionId": "1ecb362f-e11d-4ef1-8589-354a4f6ecca8",
+          "updatedAt": 1771267056001,
+          "age": 43627,
+          "systemSent": true,
+          "abortedLastRun": false,
+          "inputTokens": 58719,
+          "outputTokens": 732,
+          "totalTokens": 72930,
+          "totalTokensFresh": true,
+          "remainingTokens": 1927070,
+          "percentUsed": 4,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "system",
+            "id:1ecb362f-e11d-4ef1-8589-354a4f6ecca8"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:subagent:04e3fb04-78de-4695-9949-eb80d96c9089",
+          "kind": "direct",
+          "sessionId": "7f73c141-5d09-4a05-a11f-70be4351bad0",
+          "updatedAt": 1771266620097,
+          "age": 479531,
+          "totalTokens": null,
+          "totalTokensFresh": false,
+          "remainingTokens": null,
+          "percentUsed": null,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "id:7f73c141-5d09-4a05-a11f-70be4351bad0"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:subagent:e27077e9-85a9-4c5d-856f-516d4d83bc75",
+          "kind": "direct",
+          "sessionId": "ad4d9121-690a-4e2a-9ade-bdbb2eec3725",
+          "updatedAt": 1771266491045,
+          "age": 608583,
+          "abortedLastRun": false,
+          "inputTokens": 42443,
+          "outputTokens": 5420,
+          "totalTokens": 24305,
+          "totalTokensFresh": true,
+          "remainingTokens": 975695,
+          "percentUsed": 2,
+          "model": "anthropic/claude-opus-4.6",
+          "contextTokens": 1000000,
+          "flags": [
+            "id:ad4d9121-690a-4e2a-9ade-bdbb2eec3725"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:cron:35d2b614-ee13-4ca7-970b-2ffb9ba69078",
+          "kind": "direct",
+          "sessionId": "594fa623-5094-4751-9b4f-7191b5bd0e8b",
+          "updatedAt": 1771264800154,
+          "age": 2299474,
+          "systemSent": true,
+          "totalTokens": null,
+          "totalTokensFresh": false,
+          "remainingTokens": null,
+          "percentUsed": null,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "system",
+            "id:594fa623-5094-4751-9b4f-7191b5bd0e8b"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:cron:35d2b614-ee13-4ca7-970b-2ffb9ba69078:run:594fa623-5094-4751-9b4f-7191b5bd0e8b",
+          "kind": "direct",
+          "sessionId": "594fa623-5094-4751-9b4f-7191b5bd0e8b",
+          "updatedAt": 1771264800154,
+          "age": 2299474,
+          "systemSent": true,
+          "totalTokens": null,
+          "totalTokensFresh": false,
+          "remainingTokens": null,
+          "percentUsed": null,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "system",
+            "id:594fa623-5094-4751-9b4f-7191b5bd0e8b"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:cron:f3d1c1ce-2583-400a-89e3-5567f2711598",
+          "kind": "direct",
+          "sessionId": "d30720d0-dc44-4c55-9052-7a81819b358a",
+          "updatedAt": 1771261200109,
+          "age": 5899519,
+          "systemSent": true,
+          "totalTokens": null,
+          "totalTokensFresh": false,
+          "remainingTokens": null,
+          "percentUsed": null,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "system",
+            "id:d30720d0-dc44-4c55-9052-7a81819b358a"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:cron:f3d1c1ce-2583-400a-89e3-5567f2711598:run:d30720d0-dc44-4c55-9052-7a81819b358a",
+          "kind": "direct",
+          "sessionId": "d30720d0-dc44-4c55-9052-7a81819b358a",
+          "updatedAt": 1771261200109,
+          "age": 5899519,
+          "systemSent": true,
+          "totalTokens": null,
+          "totalTokensFresh": false,
+          "remainingTokens": null,
+          "percentUsed": null,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "system",
+            "id:d30720d0-dc44-4c55-9052-7a81819b358a"
+          ]
+        },
+        {
+          "agentId": "openclaw-builder",
+          "key": "agent:openclaw-builder:main",
+          "kind": "direct",
+          "sessionId": "ff39f5ba-3574-4f9b-aa03-2a6b89258882",
+          "updatedAt": 1771258153208,
+          "age": 8946420,
+          "systemSent": true,
+          "abortedLastRun": false,
+          "inputTokens": 361595,
+          "outputTokens": 1022,
+          "totalTokens": 360844,
+          "totalTokensFresh": true,
+          "remainingTokens": 639156,
+          "percentUsed": 36,
+          "model": "anthropic/claude-opus-4.6",
+          "contextTokens": 1000000,
+          "flags": [
+            "system",
+            "id:ff39f5ba-3574-4f9b-aa03-2a6b89258882"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:cron:1a700dcc-2b30-4749-9ccb-0fdab5a96ba5",
+          "kind": "direct",
+          "sessionId": "bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+          "updatedAt": 1771257600070,
+          "age": 9499558,
+          "systemSent": true,
+          "totalTokens": null,
+          "totalTokensFresh": false,
+          "remainingTokens": null,
+          "percentUsed": null,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "system",
+            "id:bf5f2de3-f1d0-4507-b4d9-d4893c308c8d"
+          ]
+        },
+        {
+          "agentId": "main",
+          "key": "agent:main:cron:1a700dcc-2b30-4749-9ccb-0fdab5a96ba5:run:bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+          "kind": "direct",
+          "sessionId": "bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+          "updatedAt": 1771257600070,
+          "age": 9499558,
+          "systemSent": true,
+          "totalTokens": null,
+          "totalTokensFresh": false,
+          "remainingTokens": null,
+          "percentUsed": null,
+          "model": "x-ai/grok-4.1-fast",
+          "contextTokens": 2000000,
+          "flags": [
+            "system",
+            "id:bf5f2de3-f1d0-4507-b4d9-d4893c308c8d"
+          ]
+        }
+      ],
+      "byAgent": [
+        {
+          "agentId": "main",
+          "path": "/Users/demetripanici/.openclaw/agents/main/sessions/sessions.json",
+          "count": 9,
+          "recent": [
+            {
+              "agentId": "main",
+              "key": "agent:main:main",
+              "kind": "direct",
+              "sessionId": "1ecb362f-e11d-4ef1-8589-354a4f6ecca8",
+              "updatedAt": 1771267056001,
+              "age": 43627,
+              "systemSent": true,
+              "abortedLastRun": false,
+              "inputTokens": 58719,
+              "outputTokens": 732,
+              "totalTokens": 72930,
+              "totalTokensFresh": true,
+              "remainingTokens": 1927070,
+              "percentUsed": 4,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:1ecb362f-e11d-4ef1-8589-354a4f6ecca8"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:subagent:04e3fb04-78de-4695-9949-eb80d96c9089",
+              "kind": "direct",
+              "sessionId": "7f73c141-5d09-4a05-a11f-70be4351bad0",
+              "updatedAt": 1771266620097,
+              "age": 479531,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "id:7f73c141-5d09-4a05-a11f-70be4351bad0"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:subagent:e27077e9-85a9-4c5d-856f-516d4d83bc75",
+              "kind": "direct",
+              "sessionId": "ad4d9121-690a-4e2a-9ade-bdbb2eec3725",
+              "updatedAt": 1771266491045,
+              "age": 608583,
+              "abortedLastRun": false,
+              "inputTokens": 42443,
+              "outputTokens": 5420,
+              "totalTokens": 24305,
+              "totalTokensFresh": true,
+              "remainingTokens": 975695,
+              "percentUsed": 2,
+              "model": "anthropic/claude-opus-4.6",
+              "contextTokens": 1000000,
+              "flags": [
+                "id:ad4d9121-690a-4e2a-9ade-bdbb2eec3725"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:cron:35d2b614-ee13-4ca7-970b-2ffb9ba69078",
+              "kind": "direct",
+              "sessionId": "594fa623-5094-4751-9b4f-7191b5bd0e8b",
+              "updatedAt": 1771264800154,
+              "age": 2299474,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:594fa623-5094-4751-9b4f-7191b5bd0e8b"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:cron:35d2b614-ee13-4ca7-970b-2ffb9ba69078:run:594fa623-5094-4751-9b4f-7191b5bd0e8b",
+              "kind": "direct",
+              "sessionId": "594fa623-5094-4751-9b4f-7191b5bd0e8b",
+              "updatedAt": 1771264800154,
+              "age": 2299474,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:594fa623-5094-4751-9b4f-7191b5bd0e8b"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:cron:f3d1c1ce-2583-400a-89e3-5567f2711598",
+              "kind": "direct",
+              "sessionId": "d30720d0-dc44-4c55-9052-7a81819b358a",
+              "updatedAt": 1771261200109,
+              "age": 5899519,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:d30720d0-dc44-4c55-9052-7a81819b358a"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:cron:f3d1c1ce-2583-400a-89e3-5567f2711598:run:d30720d0-dc44-4c55-9052-7a81819b358a",
+              "kind": "direct",
+              "sessionId": "d30720d0-dc44-4c55-9052-7a81819b358a",
+              "updatedAt": 1771261200109,
+              "age": 5899519,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:d30720d0-dc44-4c55-9052-7a81819b358a"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:cron:1a700dcc-2b30-4749-9ccb-0fdab5a96ba5",
+              "kind": "direct",
+              "sessionId": "bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+              "updatedAt": 1771257600070,
+              "age": 9499558,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:bf5f2de3-f1d0-4507-b4d9-d4893c308c8d"
+              ]
+            },
+            {
+              "agentId": "main",
+              "key": "agent:main:cron:1a700dcc-2b30-4749-9ccb-0fdab5a96ba5:run:bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+              "kind": "direct",
+              "sessionId": "bf5f2de3-f1d0-4507-b4d9-d4893c308c8d",
+              "updatedAt": 1771257600070,
+              "age": 9499558,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:bf5f2de3-f1d0-4507-b4d9-d4893c308c8d"
+              ]
+            }
+          ]
+        },
+        {
+          "agentId": "account-manager",
+          "path": "/Users/demetripanici/.openclaw/agents/account-manager/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "ads-monitor",
+          "path": "/Users/demetripanici/.openclaw/agents/ads-monitor/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "ads-strategist",
+          "path": "/Users/demetripanici/.openclaw/agents/ads-strategist/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "blog-writer",
+          "path": "/Users/demetripanici/.openclaw/agents/blog-writer/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "broll-producer",
+          "path": "/Users/demetripanici/.openclaw/agents/broll-producer/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "content-qa",
+          "path": "/Users/demetripanici/.openclaw/agents/content-qa/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "content-scheduler",
+          "path": "/Users/demetripanici/.openclaw/agents/content-scheduler/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "crm-agent",
+          "path": "/Users/demetripanici/.openclaw/agents/crm-agent/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "delivery-pm",
+          "path": "/Users/demetripanici/.openclaw/agents/delivery-pm/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "episode-miner",
+          "path": "/Users/demetripanici/.openclaw/agents/episode-miner/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "graphics-designer",
+          "path": "/Users/demetripanici/.openclaw/agents/graphics-designer/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "guest-booker",
+          "path": "/Users/demetripanici/.openclaw/agents/guest-booker/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "lead-qualifier",
+          "path": "/Users/demetripanici/.openclaw/agents/lead-qualifier/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "linkedin-agent",
+          "path": "/Users/demetripanici/.openclaw/agents/linkedin-agent/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "newsletter-writer",
+          "path": "/Users/demetripanici/.openclaw/agents/newsletter-writer/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "openclaw-builder",
+          "path": "/Users/demetripanici/.openclaw/agents/openclaw-builder/sessions/sessions.json",
+          "count": 27,
+          "recent": [
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:main",
+              "kind": "direct",
+              "sessionId": "ff39f5ba-3574-4f9b-aa03-2a6b89258882",
+              "updatedAt": 1771258153208,
+              "age": 8946420,
+              "systemSent": true,
+              "abortedLastRun": false,
+              "inputTokens": 361595,
+              "outputTokens": 1022,
+              "totalTokens": 360844,
+              "totalTokensFresh": true,
+              "remainingTokens": 639156,
+              "percentUsed": 36,
+              "model": "anthropic/claude-opus-4.6",
+              "contextTokens": 1000000,
+              "flags": [
+                "system",
+                "id:ff39f5ba-3574-4f9b-aa03-2a6b89258882"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:c2b02eff-7603-4743-b258-c23f7ef5bfa9",
+              "kind": "direct",
+              "sessionId": "f478ea5c-f5fb-497d-86f2-803561449e48",
+              "updatedAt": 1771255800084,
+              "age": 11299544,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:f478ea5c-f5fb-497d-86f2-803561449e48"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:c2b02eff-7603-4743-b258-c23f7ef5bfa9:run:f478ea5c-f5fb-497d-86f2-803561449e48",
+              "kind": "direct",
+              "sessionId": "f478ea5c-f5fb-497d-86f2-803561449e48",
+              "updatedAt": 1771255800084,
+              "age": 11299544,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:f478ea5c-f5fb-497d-86f2-803561449e48"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:8754fd6a-27c5-4c0f-a8fb-a1dfb15ed4ed",
+              "kind": "direct",
+              "sessionId": "be353657-808b-4b1e-a174-b14000ab14aa",
+              "updatedAt": 1771254000167,
+              "age": 13099461,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:be353657-808b-4b1e-a174-b14000ab14aa"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:8754fd6a-27c5-4c0f-a8fb-a1dfb15ed4ed:run:be353657-808b-4b1e-a174-b14000ab14aa",
+              "kind": "direct",
+              "sessionId": "be353657-808b-4b1e-a174-b14000ab14aa",
+              "updatedAt": 1771254000167,
+              "age": 13099461,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:be353657-808b-4b1e-a174-b14000ab14aa"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:d30cb419-3c10-4395-bddc-3d4ec256cfe5",
+              "kind": "direct",
+              "sessionId": "22e535a7-2e7e-4df1-8dc7-8e2fa44446ba",
+              "updatedAt": 1771252200147,
+              "age": 14899481,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:22e535a7-2e7e-4df1-8dc7-8e2fa44446ba"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:d30cb419-3c10-4395-bddc-3d4ec256cfe5:run:22e535a7-2e7e-4df1-8dc7-8e2fa44446ba",
+              "kind": "direct",
+              "sessionId": "22e535a7-2e7e-4df1-8dc7-8e2fa44446ba",
+              "updatedAt": 1771252200147,
+              "age": 14899481,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:22e535a7-2e7e-4df1-8dc7-8e2fa44446ba"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:80e055e5-c0aa-42dd-a4d0-e50a0aea855f",
+              "kind": "direct",
+              "sessionId": "1b275d27-696b-41fe-bf95-1de078ba448f",
+              "updatedAt": 1771250400159,
+              "age": 16699469,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:1b275d27-696b-41fe-bf95-1de078ba448f"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:80e055e5-c0aa-42dd-a4d0-e50a0aea855f:run:1b275d27-696b-41fe-bf95-1de078ba448f",
+              "kind": "direct",
+              "sessionId": "1b275d27-696b-41fe-bf95-1de078ba448f",
+              "updatedAt": 1771250400159,
+              "age": 16699469,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:1b275d27-696b-41fe-bf95-1de078ba448f"
+              ]
+            },
+            {
+              "agentId": "openclaw-builder",
+              "key": "agent:openclaw-builder:cron:f0d949e5-f4b4-43e3-802b-ebbcd6166876",
+              "kind": "direct",
+              "sessionId": "ee55daeb-869c-4854-b3e4-fde8646a507b",
+              "updatedAt": 1771248600166,
+              "age": 18499462,
+              "systemSent": true,
+              "totalTokens": null,
+              "totalTokensFresh": false,
+              "remainingTokens": null,
+              "percentUsed": null,
+              "model": "x-ai/grok-4.1-fast",
+              "contextTokens": 2000000,
+              "flags": [
+                "system",
+                "id:ee55daeb-869c-4854-b3e4-fde8646a507b"
+              ]
+            }
+          ]
+        },
+        {
+          "agentId": "outreach-agent",
+          "path": "/Users/demetripanici/.openclaw/agents/outreach-agent/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "podcast-inbox",
+          "path": "/Users/demetripanici/.openclaw/agents/podcast-inbox/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "project-manager",
+          "path": "/Users/demetripanici/.openclaw/agents/project-manager/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "shorts-scripter",
+          "path": "/Users/demetripanici/.openclaw/agents/shorts-scripter/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "social-writer",
+          "path": "/Users/demetripanici/.openclaw/agents/social-writer/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "solution-architect",
+          "path": "/Users/demetripanici/.openclaw/agents/solution-architect/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "thumbnail-designer",
+          "path": "/Users/demetripanici/.openclaw/agents/thumbnail-designer/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        },
+        {
+          "agentId": "trend-scout",
+          "path": "/Users/demetripanici/.openclaw/agents/trend-scout/sessions/sessions.json",
+          "count": 0,
+          "recent": []
+        }
+      ]
+    },
+    "os": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "release": "24.5.0",
+      "label": "macos 15.5 (arm64)"
+    },
+    "update": {
+      "root": "/opt/homebrew/lib/node_modules/openclaw",
+      "installKind": "package",
+      "packageManager": "pnpm",
+      "deps": {
+        "manager": "pnpm",
+        "status": "unknown",
+        "lockfilePath": "/opt/homebrew/lib/node_modules/openclaw/pnpm-lock.yaml",
+        "markerPath": "/opt/homebrew/lib/node_modules/openclaw/node_modules/.modules.yaml",
+        "reason": "lockfile missing"
+      },
+      "registry": {
+        "latestVersion": "2026.2.15"
+      }
+    },
+    "updateChannel": "stable",
+    "updateChannelSource": "default",
+    "memory": null,
+    "memoryPlugin": {
+      "enabled": true,
+      "slot": "memory-core"
+    },
+    "gateway": {
+      "mode": "local",
+      "url": "ws://127.0.0.1:18789",
+      "urlSource": "local loopback",
+      "misconfigured": false,
+      "reachable": true,
+      "connectLatencyMs": 8,
+      "self": {
+        "host": "Demetris-Mini",
+        "ip": "192.168.50.139",
+        "version": "unknown",
+        "platform": "macos 15.5"
+      },
+      "error": null
+    },
+    "gatewayService": {
+      "label": "LaunchAgent",
+      "installed": true,
+      "loadedText": "loaded",
+      "runtimeShort": "running (pid 86526)"
+    },
+    "nodeService": {
+      "label": "LaunchAgent",
+      "installed": false,
+      "loadedText": "not loaded",
+      "runtimeShort": "unknown"
+    },
+    "agents": {
+      "defaultId": "main",
+      "agents": [
+        {
+          "id": "main",
+          "name": "Jerry Baker",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/main/sessions/sessions.json",
+          "sessionsCount": 9,
+          "lastUpdatedAt": 1771267056001,
+          "lastActiveAgeMs": 43560
+        },
+        {
+          "id": "account-manager",
+          "name": "Account Manager",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-account-manager",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/account-manager/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "ads-monitor",
+          "name": "Ads Monitor",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-ads-monitor",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/ads-monitor/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "ads-strategist",
+          "name": "Ads Strategist",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-ads-strategist",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/ads-strategist/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "blog-writer",
+          "name": "Blog Writer",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-blog-writer",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/blog-writer/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "broll-producer",
+          "name": "B-Roll Producer",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-broll-producer",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/broll-producer/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "content-qa",
+          "name": "Content QA",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-content-qa",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/content-qa/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "content-scheduler",
+          "name": "Content Scheduler",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-content-scheduler",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/content-scheduler/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "crm-agent",
+          "name": "CRM Agent",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-crm-agent",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/crm-agent/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "delivery-pm",
+          "name": "Delivery PM",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-delivery-pm",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/delivery-pm/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "episode-miner",
+          "name": "Episode Miner",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-episode-miner",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/episode-miner/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "graphics-designer",
+          "name": "Graphics Designer",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-graphics-designer",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/graphics-designer/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "guest-booker",
+          "name": "Guest Booker",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-guest-booker",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/guest-booker/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "lead-qualifier",
+          "name": "Lead Qualifier",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-lead-qualifier",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/lead-qualifier/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "linkedin-agent",
+          "name": "LinkedIn Agent",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-linkedin-agent",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/linkedin-agent/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "newsletter-writer",
+          "name": "Newsletter Writer",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-newsletter-writer",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/newsletter-writer/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "openclaw-builder",
+          "name": "OpenClaw Builder",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-openclaw-builder",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/openclaw-builder/sessions/sessions.json",
+          "sessionsCount": 27,
+          "lastUpdatedAt": 1771258153208,
+          "lastActiveAgeMs": 8946353
+        },
+        {
+          "id": "outreach-agent",
+          "name": "Outreach Agent",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-outreach-agent",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/outreach-agent/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "podcast-inbox",
+          "name": "Podcast Inbox",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-podcast-inbox",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/podcast-inbox/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "project-manager",
+          "name": "Project Manager",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-project-manager",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/project-manager/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "shorts-scripter",
+          "name": "Shorts Scripter",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-shorts-scripter",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/shorts-scripter/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "social-writer",
+          "name": "Social Writer",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-social-writer",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/social-writer/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "solution-architect",
+          "name": "Solution Architect",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-solution-architect",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/solution-architect/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "thumbnail-designer",
+          "name": "Thumbnail Designer",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-thumbnail-designer",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/thumbnail-designer/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        },
+        {
+          "id": "trend-scout",
+          "name": "Trend Scout",
+          "workspaceDir": "/Users/demetripanici/.openclaw/workspace-trend-scout",
+          "bootstrapPending": false,
+          "sessionsPath": "/Users/demetripanici/.openclaw/agents/trend-scout/sessions/sessions.json",
+          "sessionsCount": 0,
+          "lastUpdatedAt": null,
+          "lastActiveAgeMs": null
+        }
+      ],
+      "totalSessions": 36,
+      "bootstrapPendingCount": 0
+    },
+    "securityAudit": {
+      "ts": 1771267099646,
+      "summary": {
+        "critical": 0,
+        "warn": 2,
+        "info": 1
+      },
+      "findings": [
+        {
+          "checkId": "summary.attack_surface",
+          "severity": "info",
+          "title": "Attack surface summary",
+          "detail": "groups: open=0, allowlist=1\ntools.elevated: enabled\nhooks.webhooks: disabled\nhooks.internal: disabled\nbrowser control: enabled"
+        },
+        {
+          "checkId": "gateway.trusted_proxies_missing",
+          "severity": "warn",
+          "title": "Reverse proxy headers are not trusted",
+          "detail": "gateway.bind is loopback and gateway.trustedProxies is empty. If you expose the Control UI through a reverse proxy, configure trusted proxies so local-client checks cannot be spoofed.",
+          "remediation": "Set gateway.trustedProxies to your proxy IPs or keep the Control UI local-only."
+        },
+        {
+          "checkId": "fs.credentials_dir.perms_readable",
+          "severity": "warn",
+          "title": "Credentials dir is readable by others",
+          "detail": "/Users/demetripanici/.openclaw/credentials mode=755; credentials and allowlists can be sensitive.",
+          "remediation": "chmod 700 /Users/demetripanici/.openclaw/credentials"
+        }
+      ]
+    }
+  },
+  "snapshotAt": 1771267099690
+}
