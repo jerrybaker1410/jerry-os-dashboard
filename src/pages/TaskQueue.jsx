@@ -6,265 +6,228 @@ import {
   getFilteredRowModel,
   flexRender,
 } from '@tanstack/react-table';
-import { Play, Pause, Search, RefreshCw, ArrowUpDown, Timer, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
-import { useCronList, useRunCron, useToggleCron } from '../hooks/useOpenClaw';
-import { cronToHuman, timeAgo, formatDuration, cn } from '../lib/utils';
+import { ArrowUpDown, ArrowUp, ArrowDown, Search, Filter } from 'lucide-react';
+import { useTaskQueue } from '../hooks/useOpenClawAPI';
+import PageHeader from '../components/layout/PageHeader';
+import StatusBadge from '../components/shared/StatusBadge';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
+import { formatDollars, formatTokens, formatRelativeTime } from '../lib/formatters';
+import { AGENTS } from '../lib/constants';
+
+const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+const priorityColors = {
+  critical: 'text-accent-red',
+  high: 'text-accent-yellow',
+  medium: 'text-accent-blue',
+  low: 'text-text-muted',
+};
 
 export default function TaskQueue() {
-  const { data: cronData, isLoading, refetch } = useCronList();
-  const runCron = useRunCron();
-  const toggleCron = useToggleCron();
-  const [globalFilter, setGlobalFilter] = useState('');
+  const { data: tasks, isLoading, error, refetch } = useTaskQueue();
   const [sorting, setSorting] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
-  const jobs = cronData?.jobs || [];
+  const filteredData = useMemo(() => {
+    if (!tasks) return [];
+    if (statusFilter === 'all') return tasks;
+    return tasks.filter(t => t.status === statusFilter);
+  }, [tasks, statusFilter]);
 
   const columns = useMemo(() => [
     {
-      accessorKey: 'enabled',
-      header: 'Status',
+      accessorKey: 'priority',
+      header: 'Priority',
       size: 80,
       cell: ({ getValue }) => {
-        const enabled = getValue();
+        const p = getValue();
         return (
-          <div className="flex items-center gap-1.5">
-            <div className={cn(
-              'w-2 h-2 rounded-full',
-              enabled ? 'bg-neon-green pulse-dot' : 'bg-jerry-500'
-            )} />
-            <span className={cn('text-xs font-medium', enabled ? 'text-neon-green' : 'text-jerry-500')}>
-              {enabled ? 'Active' : 'Off'}
-            </span>
-          </div>
+          <span className={`text-xs font-medium uppercase ${priorityColors[p] || 'text-text-muted'}`}>
+            {p}
+          </span>
         );
+      },
+      sortingFn: (a, b) => {
+        return (priorityOrder[a.getValue('priority')] ?? 99) - (priorityOrder[b.getValue('priority')] ?? 99);
       },
     },
     {
-      accessorKey: 'name',
-      header: 'Job Name',
-      size: 250,
-      cell: ({ getValue, row }) => (
-        <div>
-          <div className="text-sm font-medium text-white truncate max-w-[240px]">
-            {getValue() || row.original.id.slice(0, 12)}
-          </div>
-          {row.original.agentId && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-neon-purple/10 text-neon-purple mt-0.5 inline-block">
-              {row.original.agentId}
-            </span>
+      accessorKey: 'title',
+      header: 'Task',
+      size: 280,
+      cell: ({ row }) => (
+        <div className="min-w-0">
+          <p className="text-sm text-text-primary truncate">{row.original.title}</p>
+          {row.original.description && (
+            <p className="text-xs text-text-muted truncate mt-0.5">{row.original.description}</p>
           )}
         </div>
       ),
     },
     {
-      accessorKey: 'schedule',
-      header: 'Schedule',
-      size: 180,
-      cell: ({ getValue }) => {
-        const sched = getValue();
-        return (
-          <div>
-            <div className="text-xs text-jerry-300">{cronToHuman(sched?.expr)}</div>
-            <div className="text-[10px] text-jerry-500 font-mono">{sched?.expr}</div>
-          </div>
-        );
-      },
-      sortingFn: (rowA, rowB) => {
-        const a = rowA.original.state?.nextRunAtMs || Infinity;
-        const b = rowB.original.state?.nextRunAtMs || Infinity;
-        return a - b;
-      },
-    },
-    {
-      accessorKey: 'state',
-      header: 'Next Run',
-      size: 150,
-      cell: ({ getValue }) => {
-        const state = getValue();
-        if (!state?.nextRunAtMs) return <span className="text-jerry-500 text-xs">—</span>;
-        return (
-          <div className="flex items-center gap-1.5">
-            <Timer size={12} className="text-neon-cyan" />
-            <span className="text-xs text-jerry-300">{timeAgo(state.nextRunAtMs)}</span>
-          </div>
-        );
-      },
-      sortingFn: (rowA, rowB) => {
-        const a = rowA.original.state?.nextRunAtMs || Infinity;
-        const b = rowB.original.state?.nextRunAtMs || Infinity;
-        return a - b;
-      },
-    },
-    {
-      id: 'lastRun',
-      header: 'Last Run',
-      size: 150,
+      accessorKey: 'agentName',
+      header: 'Agent',
+      size: 140,
       cell: ({ row }) => {
-        const state = row.original.state;
-        if (!state?.lastRunAtMs) return <span className="text-jerry-500 text-xs">Never</span>;
-        const hasError = state.consecutiveErrors > 0;
+        const agent = Object.values(AGENTS).find(a => a.id === row.original.agent);
         return (
-          <div>
-            <div className="flex items-center gap-1.5">
-              {hasError
-                ? <AlertTriangle size={12} className="text-neon-red" />
-                : <CheckCircle2 size={12} className="text-neon-green" />
-              }
-              <span className="text-xs text-jerry-300">{timeAgo(state.lastRunAtMs)}</span>
-            </div>
-            {state.lastDurationMs && (
-              <span className="text-[10px] text-jerry-500">{formatDuration(state.lastDurationMs)}</span>
-            )}
+          <div className="flex items-center gap-2">
+            <span className="text-xs">{agent?.emoji || '🤖'}</span>
+            <span className="text-sm text-text-secondary">{row.original.agentName}</span>
           </div>
         );
       },
     },
     {
-      id: 'actions',
-      header: 'Actions',
+      accessorKey: 'status',
+      header: 'Status',
+      size: 110,
+      cell: ({ getValue }) => <StatusBadge status={getValue()} />,
+    },
+    {
+      accessorKey: 'type',
+      header: 'Type',
+      size: 100,
+      cell: ({ getValue }) => (
+        <span className="text-xs px-2 py-0.5 rounded bg-elevated text-text-muted">
+          {getValue()}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'model',
+      header: 'Model',
       size: 120,
-      cell: ({ row }) => {
-        const job = row.original;
-        return (
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => runCron.mutate(job.id)}
-              disabled={runCron.isPending}
-              className="px-2 py-1 rounded text-[11px] font-medium bg-neon-blue/10 text-neon-blue hover:bg-neon-blue/20 transition-colors disabled:opacity-50"
-              title="Run now"
-            >
-              <Play size={12} />
-            </button>
-            <button
-              onClick={() => toggleCron.mutate({ id: job.id, enabled: !job.enabled })}
-              disabled={toggleCron.isPending}
-              className={cn(
-                'px-2 py-1 rounded text-[11px] font-medium transition-colors disabled:opacity-50',
-                job.enabled
-                  ? 'bg-neon-orange/10 text-neon-orange hover:bg-neon-orange/20'
-                  : 'bg-neon-green/10 text-neon-green hover:bg-neon-green/20'
-              )}
-              title={job.enabled ? 'Disable' : 'Enable'}
-            >
-              {job.enabled ? <Pause size={12} /> : <Play size={12} />}
-            </button>
-          </div>
-        );
-      },
+      cell: ({ getValue }) => (
+        <span className="text-xs text-text-secondary font-data">{getValue()}</span>
+      ),
     },
-  ], [runCron, toggleCron]);
+    {
+      accessorKey: 'tokensUsed',
+      header: 'Tokens',
+      size: 80,
+      cell: ({ getValue }) => (
+        <span className="text-xs text-text-secondary font-data">{formatTokens(getValue())}</span>
+      ),
+    },
+    {
+      accessorKey: 'cost',
+      header: 'Cost',
+      size: 70,
+      cell: ({ getValue }) => (
+        <span className="text-xs text-text-secondary font-data">${formatDollars(getValue())}</span>
+      ),
+    },
+  ], []);
 
   const table = useReactTable({
-    data: jobs,
+    data: filteredData,
     columns,
-    state: { globalFilter, sorting },
-    onGlobalFilterChange: setGlobalFilter,
+    state: { sorting, globalFilter },
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: (row, columnId, filterValue) => {
-      const name = row.original.name || '';
-      const agent = row.original.agentId || '';
-      const search = filterValue.toLowerCase();
-      return name.toLowerCase().includes(search) || agent.toLowerCase().includes(search);
-    },
   });
 
+  if (isLoading) return <div className="flex items-center justify-center h-64"><LoadingSpinner size="lg" /></div>;
+  if (error) return <div className="text-accent-red p-4">Error loading tasks: {error.message}</div>;
+
+  const statuses = ['all', 'queued', 'running', 'completed', 'failed', 'waiting'];
+
   return (
-    <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Timer className="text-neon-purple" size={24} />
-            Task Queue
-          </h2>
-          <p className="text-sm text-jerry-400 mt-1">
-            {jobs.length} cron jobs • {jobs.filter(j => j.enabled).length} active
-          </p>
+    <div className="space-y-4">
+      <PageHeader
+        title="Task Queue"
+        subtitle={`${tasks.length} tasks across all agents`}
+        onRefresh={refetch}
+      />
+
+      {/* Filters */}
+      <div className="flex items-center gap-3">
+        <div className="relative flex-1 max-w-sm">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            value={globalFilter}
+            onChange={e => setGlobalFilter(e.target.value)}
+            className="w-full pl-9 pr-3 py-2 bg-surface border border-border-default rounded-md text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-blue transition-colors"
+          />
         </div>
-        <div className="flex items-center gap-3">
-          {/* Search */}
-          <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-jerry-500" />
-            <input
-              value={globalFilter}
-              onChange={e => setGlobalFilter(e.target.value)}
-              placeholder="Search jobs..."
-              className="pl-9 pr-3 py-2 rounded-lg bg-jerry-800/50 border border-jerry-600/30 text-sm text-white placeholder-jerry-500 focus:outline-none focus:border-neon-purple/50 w-60"
-            />
-          </div>
-          <button
-            onClick={() => refetch()}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-jerry-700/50 text-jerry-300 hover:text-white hover:bg-jerry-600/50 transition-all text-sm"
-          >
-            <RefreshCw size={14} />
-          </button>
+        <div className="flex items-center gap-1 bg-surface border border-border-default rounded-md p-0.5">
+          {statuses.map(s => (
+            <button
+              key={s}
+              onClick={() => setStatusFilter(s)}
+              className={`px-2.5 py-1.5 rounded text-xs font-medium transition-colors ${
+                statusFilter === s
+                  ? 'bg-accent-blue/10 text-accent-blue'
+                  : 'text-text-muted hover:text-text-secondary'
+              }`}
+            >
+              {s === 'all' ? 'All' : s}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Table */}
-      <div className="card overflow-hidden">
+      <div className="bg-surface border border-border-default rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id} className="border-b border-jerry-600/30">
-                  {headerGroup.headers.map(header => (
+              {table.getHeaderGroups().map(hg => (
+                <tr key={hg.id} className="border-b border-border-default">
+                  {hg.headers.map(header => (
                     <th
                       key={header.id}
-                      className="px-4 py-3 text-left text-[11px] font-semibold text-jerry-400 uppercase tracking-wider cursor-pointer hover:text-jerry-200 select-none"
-                      onClick={header.column.getToggleSortingHandler()}
+                      className="px-4 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider cursor-pointer hover:text-text-secondary select-none"
                       style={{ width: header.getSize() }}
+                      onClick={header.column.getToggleSortingHandler()}
                     >
                       <div className="flex items-center gap-1">
                         {flexRender(header.column.columnDef.header, header.getContext())}
-                        {header.column.getCanSort() && <ArrowUpDown size={10} className="text-jerry-600" />}
+                        {header.column.getIsSorted() === 'asc' ? (
+                          <ArrowUp size={12} />
+                        ) : header.column.getIsSorted() === 'desc' ? (
+                          <ArrowDown size={12} />
+                        ) : (
+                          <ArrowUpDown size={12} className="opacity-30" />
+                        )}
                       </div>
                     </th>
                   ))}
                 </tr>
               ))}
             </thead>
-            <tbody>
-              {isLoading ? (
+            <tbody className="divide-y divide-border-default">
+              {table.getRowModel().rows.map(row => (
+                <tr key={row.id} className="hover:bg-elevated/50 transition-colors">
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id} className="px-4 py-3" style={{ width: cell.column.getSize() }}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              {table.getRowModel().rows.length === 0 && (
                 <tr>
-                  <td colSpan={columns.length} className="px-4 py-12 text-center text-jerry-500">
-                    Loading cron jobs...
+                  <td colSpan={columns.length} className="px-4 py-8 text-center text-text-muted text-sm">
+                    No tasks found
                   </td>
                 </tr>
-              ) : table.getRowModel().rows.length === 0 ? (
-                <tr>
-                  <td colSpan={columns.length} className="px-4 py-12 text-center text-jerry-500">
-                    No jobs found
-                  </td>
-                </tr>
-              ) : (
-                table.getRowModel().rows.map(row => (
-                  <tr
-                    key={row.id}
-                    className="border-b border-jerry-700/20 hover:bg-jerry-800/30 transition-colors"
-                  >
-                    {row.getVisibleCells().map(cell => (
-                      <td key={cell.id} className="px-4 py-3">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
-                  </tr>
-                ))
               )}
             </tbody>
           </table>
         </div>
-      </div>
-
-      {/* Run mutation feedback */}
-      {runCron.isSuccess && (
-        <div className="fixed bottom-6 right-6 bg-neon-green/10 border border-neon-green/30 text-neon-green px-4 py-2 rounded-lg text-sm">
-          ✓ Job triggered successfully
+        <div className="border-t border-border-default px-4 py-2 flex items-center justify-between">
+          <span className="text-xs text-text-muted">
+            {table.getRowModel().rows.length} of {tasks.length} tasks
+          </span>
         </div>
-      )}
+      </div>
     </div>
   );
 }

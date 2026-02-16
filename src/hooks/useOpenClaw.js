@@ -1,58 +1,32 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../lib/api';
-
-export function useSessions(options = {}) {
-  return useQuery({
-    queryKey: ['sessions'],
-    queryFn: api.getSessions,
-    refetchInterval: 30000, // 30s
-    ...options,
-  });
-}
-
-export function useCronList(options = {}) {
-  return useQuery({
-    queryKey: ['cron-list'],
-    queryFn: api.getCronList,
-    refetchInterval: 60000, // 60s
-    ...options,
-  });
-}
-
-export function useCronStatus(options = {}) {
-  return useQuery({
-    queryKey: ['cron-status'],
-    queryFn: api.getCronStatus,
-    refetchInterval: 60000,
-    ...options,
-  });
-}
+import { useQuery } from '@tanstack/react-query';
+import { fetchStatus, fetchSessions } from '../lib/api';
 
 export function useStatus(options = {}) {
   return useQuery({
     queryKey: ['status'],
-    queryFn: api.getStatus,
+    queryFn: fetchStatus,
     refetchInterval: 60000,
     ...options,
   });
 }
 
-export function useRunCron() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (id) => api.runCron(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['cron-list'] });
+export function useSessions(options = {}) {
+  return useQuery({
+    queryKey: ['sessions-raw'],
+    queryFn: async () => {
+      const sessions = await fetchSessions();
+      // AgentProfiles expects { sessions: [...] } with key-based shape
+      // Transform mock data to match
+      return {
+        sessions: sessions.map((s) => ({
+          ...s,
+          key: `agent:${s.agent}:${s.status === 'active' ? 'main' : 'subagent:' + s.id}`,
+          ageMs: s.startedAt ? Date.now() - new Date(s.startedAt).getTime() : null,
+          totalTokens: (s.tokensIn || 0) + (s.tokensOut || 0),
+        })),
+      };
     },
-  });
-}
-
-export function useToggleCron() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, enabled }) => api.toggleCron(id, enabled),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['cron-list'] });
-    },
+    refetchInterval: 30000,
+    ...options,
   });
 }

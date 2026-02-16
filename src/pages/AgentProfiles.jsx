@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { Users, Bot, Cpu, Activity, Zap, Clock, Search } from 'lucide-react';
+import { Users, Bot, Activity, Zap, Clock, Search } from 'lucide-react';
 import { useStatus, useSessions } from '../hooks/useOpenClaw';
-import { formatTokens, timeAgo, cn } from '../lib/utils';
+import { formatTokens, timeAgo } from '../lib/utils';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
 
-const agentColors = [
-  'from-neon-green/20 to-neon-green/5 border-neon-green/20',
-  'from-neon-blue/20 to-neon-blue/5 border-neon-blue/20',
-  'from-neon-purple/20 to-neon-purple/5 border-neon-purple/20',
-  'from-neon-orange/20 to-neon-orange/5 border-neon-orange/20',
-  'from-neon-cyan/20 to-neon-cyan/5 border-neon-cyan/20',
-  'from-neon-pink/20 to-neon-pink/5 border-neon-pink/20',
+const agentAccents = [
+  { border: 'border-accent-blue/30', bg: 'bg-accent-blue/5', dot: 'bg-accent-blue' },
+  { border: 'border-accent-green/30', bg: 'bg-accent-green/5', dot: 'bg-accent-green' },
+  { border: 'border-yellow-500/30', bg: 'bg-yellow-500/5', dot: 'bg-yellow-500' },
+  { border: 'border-accent-red/30', bg: 'bg-accent-red/5', dot: 'bg-accent-red' },
+  { border: 'border-purple-500/30', bg: 'bg-purple-500/5', dot: 'bg-purple-500' },
+  { border: 'border-pink-500/30', bg: 'bg-pink-500/5', dot: 'bg-pink-500' },
 ];
 
 export default function AgentProfiles() {
@@ -17,21 +18,18 @@ export default function AgentProfiles() {
   const { data: sessionsData, isLoading: sessionsLoading } = useSessions();
   const [search, setSearch] = useState('');
 
-  // Extract agent list from status data
   const heartbeatAgents = statusData?.heartbeat?.agents || [];
   const sessions = sessionsData?.sessions || [];
 
-  // Build agent profiles from heartbeat data + session data
   const agentProfiles = heartbeatAgents.map((agent, i) => {
-    // Find sessions for this agent
-    const agentSessions = sessions.filter(s => {
-      const parts = s.key.split(':');
+    const agentSessions = sessions.filter((s) => {
+      const parts = (s.key || '').split(':');
       return parts[1] === agent.agentId;
     });
 
     const totalTokens = agentSessions.reduce((sum, s) => sum + (s.totalTokens || 0), 0);
     const lastActive = agentSessions.length > 0
-      ? Math.min(...agentSessions.map(s => s.ageMs))
+      ? Math.min(...agentSessions.map((s) => s.ageMs || Infinity))
       : null;
 
     return {
@@ -43,63 +41,61 @@ export default function AgentProfiles() {
     };
   });
 
-  const filtered = agentProfiles.filter(a =>
+  const filtered = agentProfiles.filter((a) =>
     a.agentId.toLowerCase().includes(search.toLowerCase())
   );
 
+  const isLoading = statusLoading || sessionsLoading;
+
   return (
-    <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Users className="text-neon-cyan" size={24} />
+          <h2 className="text-xl font-semibold text-text-primary flex items-center gap-2">
+            <Users className="text-accent-blue" size={22} />
             Agent Profiles
           </h2>
-          <p className="text-sm text-jerry-400 mt-1">
-            {heartbeatAgents.length} registered agents • {heartbeatAgents.filter(a => a.enabled).length} with heartbeat
+          <p className="text-sm text-text-secondary mt-0.5">
+            {heartbeatAgents.length} registered agents · {heartbeatAgents.filter((a) => a.enabled).length} with heartbeat
           </p>
         </div>
         <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-jerry-500" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search agents..."
-            className="pl-9 pr-3 py-2 rounded-lg bg-jerry-800/50 border border-jerry-600/30 text-sm text-white placeholder-jerry-500 focus:outline-none focus:border-neon-cyan/50 w-60"
+            className="pl-9 pr-3 py-2 rounded-md bg-surface border border-border-default text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-blue transition-colors w-60"
           />
         </div>
       </div>
 
       {/* Agent Grid */}
-      {statusLoading || sessionsLoading ? (
-        <div className="text-center py-12 text-jerry-500">Loading agents...</div>
+      {isLoading ? (
+        <div className="flex items-center justify-center h-48">
+          <LoadingSpinner size="lg" />
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((agent) => {
-            const colorSet = agentColors[agent.colorIndex % agentColors.length];
+            const accent = agentAccents[agent.colorIndex % agentAccents.length];
             return (
               <div
                 key={agent.agentId}
-                className={cn(
-                  'card p-5 bg-gradient-to-br border transition-all duration-200 hover:scale-[1.01]',
-                  colorSet
-                )}
+                className={`bg-surface border ${accent.border} rounded-lg p-5 hover:border-border-hover transition-all`}
               >
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-jerry-800/80 flex items-center justify-center">
-                      <Bot size={20} className="text-jerry-300" />
+                    <div className="w-10 h-10 rounded-lg bg-elevated flex items-center justify-center">
+                      <Bot size={20} className="text-text-secondary" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-white">{agent.agentId}</h3>
+                      <h3 className="text-sm font-semibold text-text-primary">{agent.agentId}</h3>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <div className={cn(
-                          'w-1.5 h-1.5 rounded-full',
-                          agent.enabled ? 'bg-neon-green pulse-dot' : 'bg-jerry-600'
-                        )} />
-                        <span className="text-[10px] text-jerry-400">
+                        <div className={`w-1.5 h-1.5 rounded-full ${agent.enabled ? accent.dot + ' animate-pulse-green' : 'bg-gray-600'}`} />
+                        <span className="text-[10px] text-text-muted">
                           {agent.enabled ? `Heartbeat ${agent.every}` : 'Heartbeat disabled'}
                         </span>
                       </div>
@@ -109,22 +105,26 @@ export default function AgentProfiles() {
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-jerry-900/40 rounded-md px-2 py-2 text-center">
-                    <Activity size={12} className="text-jerry-500 mx-auto mb-1" />
-                    <div className="text-xs font-bold text-white">{agent.sessions}</div>
-                    <div className="text-[9px] text-jerry-500">Sessions</div>
+                  <div className="bg-elevated rounded-md px-2 py-2 text-center">
+                    <Activity size={12} className="text-text-muted mx-auto mb-1" />
+                    <div className="text-xs font-semibold text-text-primary">{agent.sessions}</div>
+                    <div className="text-[9px] text-text-muted">Sessions</div>
                   </div>
-                  <div className="bg-jerry-900/40 rounded-md px-2 py-2 text-center">
-                    <Zap size={12} className="text-jerry-500 mx-auto mb-1" />
-                    <div className="text-xs font-bold text-white">{formatTokens(agent.totalTokens)}</div>
-                    <div className="text-[9px] text-jerry-500">Tokens</div>
+                  <div className="bg-elevated rounded-md px-2 py-2 text-center">
+                    <Zap size={12} className="text-text-muted mx-auto mb-1" />
+                    <div className="text-xs font-semibold text-text-primary">{formatTokens(agent.totalTokens)}</div>
+                    <div className="text-[9px] text-text-muted">Tokens</div>
                   </div>
-                  <div className="bg-jerry-900/40 rounded-md px-2 py-2 text-center">
-                    <Clock size={12} className="text-jerry-500 mx-auto mb-1" />
-                    <div className="text-xs font-bold text-white">
-                      {agent.lastActiveMs !== null ? (agent.lastActiveMs < 60000 ? 'Now' : timeAgo(Date.now() - agent.lastActiveMs).replace(' ago', '')) : '—'}
+                  <div className="bg-elevated rounded-md px-2 py-2 text-center">
+                    <Clock size={12} className="text-text-muted mx-auto mb-1" />
+                    <div className="text-xs font-semibold text-text-primary">
+                      {agent.lastActiveMs !== null && agent.lastActiveMs !== Infinity
+                        ? agent.lastActiveMs < 60000
+                          ? 'Now'
+                          : timeAgo(Date.now() - agent.lastActiveMs).replace(' ago', '')
+                        : '—'}
                     </div>
-                    <div className="text-[9px] text-jerry-500">Last Active</div>
+                    <div className="text-[9px] text-text-muted">Last Active</div>
                   </div>
                 </div>
               </div>
@@ -134,10 +134,10 @@ export default function AgentProfiles() {
       )}
 
       {/* Empty state */}
-      {!statusLoading && filtered.length === 0 && (
-        <div className="card p-12 text-center">
-          <Bot size={48} className="text-jerry-600 mx-auto mb-3" />
-          <p className="text-jerry-400">No agents match your search</p>
+      {!isLoading && filtered.length === 0 && (
+        <div className="bg-surface border border-border-default rounded-lg p-12 text-center">
+          <Bot size={48} className="text-text-muted mx-auto mb-3" />
+          <p className="text-text-muted">No agents match your search</p>
         </div>
       )}
     </div>
