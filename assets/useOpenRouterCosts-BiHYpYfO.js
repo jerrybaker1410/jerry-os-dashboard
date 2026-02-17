@@ -1,0 +1,1 @@
+import{a as e}from"./vendor-query-BDlgVFKC.js";import{R as t,l as r}from"./index-BLPMiw5x.js";function o(){return e({queryKey:["costs"],queryFn:r,refetchInterval:t.COSTS,staleTime:3e4})}export{o as u};
