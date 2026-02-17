@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { RefreshCw, AlertOctagon } from 'lucide-react';
 import { useToast } from '../shared/Toast';
 import { useQueryClient } from '@tanstack/react-query';
@@ -5,9 +6,21 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function PageHeader({ title, subtitle, actions, onRefresh }) {
   const toast = useToast();
   const queryClient = useQueryClient();
+  const [primed, setPrimed] = useState(false);
+  const timerRef = useRef(null);
 
   const handleEmergencyStop = async () => {
-    if (!confirm('EMERGENCY STOP: Kill all active sessions?')) return;
+    if (!primed) {
+      setPrimed(true);
+      toast.warning('Click again within 3s to confirm EMERGENCY STOP');
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setPrimed(false), 3000);
+      return;
+    }
+
+    // Second click — execute
+    setPrimed(false);
+    clearTimeout(timerRef.current);
     try {
       await fetch(`${import.meta.env.BASE_URL}api/emergency/stop`, { method: 'POST' });
       toast.warning('Kill signal sent — checking status…');
@@ -30,11 +43,15 @@ export default function PageHeader({ title, subtitle, actions, onRefresh }) {
         <button
           type="button"
           onClick={handleEmergencyStop}
-          className="flex items-center gap-2 px-3 py-2 bg-accent-red/10 text-accent-red border border-accent-red/20 rounded-md hover:bg-accent-red/20 transition-colors text-sm font-medium"
-          title="Kill all active sessions"
+          className={`flex items-center gap-2 px-3 py-2 border rounded-md transition-colors text-sm font-medium ${
+            primed
+              ? 'bg-accent-red/30 text-accent-red border-accent-red/50 animate-pulse'
+              : 'bg-accent-red/10 text-accent-red border-accent-red/20 hover:bg-accent-red/20'
+          }`}
+          title={primed ? 'Click again to confirm' : 'Kill all active sessions'}
         >
           <AlertOctagon size={16} />
-          <span>Stop All</span>
+          <span>{primed ? 'Confirm Stop' : 'Stop All'}</span>
         </button>
 
         {onRefresh && (

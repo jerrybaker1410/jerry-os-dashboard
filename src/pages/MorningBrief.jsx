@@ -85,7 +85,7 @@ export default function MorningBrief() {
     : 'text-accent-green';
 
   return (
-    <div className="space-y-6">
+    <div className="page-enter space-y-6">
       <PageHeader
         title={`${greeting()}, Demetri`}
         subtitle={new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}

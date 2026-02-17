@@ -16,6 +16,7 @@ import { useQueryClient } from '@tanstack/react-query';
  *   g then b    → Morning Brief
  *   g then g    → Goal Tracker
  *   g then h    → System Health
+ *   g then k    → Kanban Board
  *   r           → refresh all data
  */
 export default function useKeyboardShortcuts({ onTogglePalette }) {
@@ -72,9 +73,6 @@ export default function useKeyboardShortcuts({ onTogglePalette }) {
           case 'a':
             navigate('/agents');
             return;
-          case 'r':
-            navigate('/tasks');
-            return;
           case 'm':
             navigate('/memory');
             return;
@@ -86,6 +84,9 @@ export default function useKeyboardShortcuts({ onTogglePalette }) {
             return;
           case 'h':
             navigate('/health');
+            return;
+          case 'k':
+            navigate('/kanban');
             return;
         }
       }

@@ -100,7 +100,7 @@ export default function CronOperations() {
   if (isLoading) return <SkeletonTable rows={8} cols={6} />;
 
   return (
-    <div className="space-y-6">
+    <div className="page-enter space-y-6">
       <PageHeader
         title="Cron Operations"
         subtitle={`${cronJobs.length} cron jobs configured`}

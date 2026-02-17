@@ -383,7 +383,7 @@ export default function AgentProfiles() {
   const teamLabel = (id) => id === 'all' ? 'All' : AGENT_TEAMS[Object.keys(AGENT_TEAMS).find((k) => AGENT_TEAMS[k].id === id)]?.label || id;
 
   return (
-    <div className="space-y-4">
+    <div className="page-enter space-y-4">
       <PageHeader
         title="Agent Fleet"
         subtitle={`${Object.keys(AGENTS).length} agents across ${Object.keys(AGENT_TEAMS).length} teams`}

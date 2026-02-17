@@ -170,7 +170,7 @@ export default function SessionsLogs() {
   const statuses = ['all', 'active', 'completed', 'idle'];
 
   return (
-    <div className="space-y-4">
+    <div className="page-enter space-y-4">
       <PageHeader
         title="Sessions & Logs"
         subtitle={`${sessionList.length} sessions tracked`}

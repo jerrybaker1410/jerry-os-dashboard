@@ -80,7 +80,7 @@ export default function MemoryBrowser() {
   const { data: results = [], isLoading, isFetching } = useMemorySearch(debouncedQuery);
 
   return (
-    <div className="space-y-4">
+    <div className="page-enter space-y-4">
       <PageHeader
         title="Memory Browser"
         subtitle="Search agent memory and knowledge base"

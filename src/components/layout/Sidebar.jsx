@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, ListTodo, DollarSign, Terminal, Users,
-  Brain, Clock, Target, Sun, Activity, ChevronRight,
+  Brain, Clock, Target, Sun, Activity, KanbanSquare, ChevronRight,
 } from 'lucide-react';
 import { AGENTS, AGENT_TEAMS, NAV_ITEMS } from '../../lib/constants';
 
@@ -16,6 +16,7 @@ const iconMap = {
   Target,
   Sun,
   Activity,
+  KanbanSquare,
 };
 
 // Group nav items by section

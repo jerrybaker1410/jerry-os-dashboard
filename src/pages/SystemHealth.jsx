@@ -145,7 +145,7 @@ export default function SystemHealth() {
   const channelLabels = channelData?.channelLabels || {};
 
   return (
-    <div className="space-y-6">
+    <div className="page-enter space-y-6">
       <PageHeader
         title="System Health"
         subtitle="Gateway, channels, and agent connectivity"

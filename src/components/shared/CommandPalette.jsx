@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Search, LayoutDashboard, ListTodo, DollarSign, Terminal,
   Users, Clock, Brain, Target, RefreshCw, Command, AlertOctagon,
-  Sun, Activity,
+  Sun, Activity, KanbanSquare,
 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -20,6 +20,7 @@ const ICONS = {
   AlertOctagon,
   Sun,
   Activity,
+  KanbanSquare,
 };
 
 export default function CommandPalette({ open, onClose }) {
@@ -41,6 +42,7 @@ export default function CommandPalette({ open, onClose }) {
     { id: 'nav-goals', label: 'Go to Goal Tracker', icon: 'Target', group: 'Navigate', shortcut: 'g g', action: () => navigate('/goals') },
     { id: 'nav-brief', label: 'Go to Morning Brief', icon: 'Sun', group: 'Navigate', shortcut: 'g b', action: () => navigate('/brief') },
     { id: 'nav-health', label: 'Go to System Health', icon: 'Activity', group: 'Navigate', shortcut: 'g h', action: () => navigate('/health') },
+    { id: 'nav-kanban', label: 'Go to Kanban Board', icon: 'KanbanSquare', group: 'Navigate', shortcut: 'g k', action: () => navigate('/kanban') },
     { id: 'search-memory', label: 'Search memories...', icon: 'Brain', group: 'Search', action: () => navigate('/memory') },
     { id: 'search-agents', label: 'Find agent...', icon: 'Users', group: 'Search', action: () => navigate('/agents') },
     { id: 'refresh', label: 'Refresh all data', icon: 'RefreshCw', group: 'Actions', action: () => queryClient.invalidateQueries() },
@@ -51,9 +53,8 @@ export default function CommandPalette({ open, onClose }) {
       group: 'Actions',
       danger: true,
       action: async () => {
-        if (!confirm('EMERGENCY STOP: Kill all active sessions?')) return;
         try {
-          await fetch(`${import.meta.env.BASE_URL}api/emergency/stop`);
+          await fetch(`${import.meta.env.BASE_URL}api/emergency/stop`, { method: 'POST' });
           queryClient.invalidateQueries();
         } catch { /* ignore */ }
       },

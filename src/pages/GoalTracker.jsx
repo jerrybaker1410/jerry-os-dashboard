@@ -59,7 +59,7 @@ export default function GoalTracker() {
   const goals = parseGoals(data?.content);
 
   return (
-    <div className="space-y-6">
+    <div className="page-enter space-y-6">
       <PageHeader
         title="Goal Tracker"
         subtitle="Q1 2026 business goals from brain/goals/goals.md"

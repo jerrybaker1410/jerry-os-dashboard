@@ -100,6 +100,7 @@ export const NAV_ITEMS = [
   { path: '/goals', label: 'Goal Tracker', icon: 'Target', section: 'Analytics' },
   // System
   { path: '/health', label: 'System Health', icon: 'Activity', section: 'System' },
+  { path: '/kanban', label: 'Kanban Board', icon: 'KanbanSquare', section: 'System' },
 ];
 
 // Cost budget thresholds (daily, USD)

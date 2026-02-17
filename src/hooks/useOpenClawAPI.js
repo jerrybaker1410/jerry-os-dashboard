@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   fetchDashboardData,
   fetchSessions,
@@ -11,6 +11,11 @@ import {
   fetchBrief,
   fetchMemorySearch,
   fetchMemoryStatus,
+  fetchGoalsStatus,
+  updateGoalsStatus,
+  fetchGoals,
+  fetchContentQueue,
+  updateContentQueue,
 } from '../lib/api';
 import { REFRESH_INTERVALS } from '../lib/constants';
 
@@ -79,6 +84,7 @@ export function useCronRuns(jobId, limit = 10) {
     queryKey: ['cron-runs', jobId, limit],
     queryFn: () => fetchCronRuns(jobId, limit),
     enabled: !!jobId,
+    refetchInterval: 30000,
   });
 }
 
@@ -133,5 +139,87 @@ export function useMemoryStatus() {
   return useQuery({
     queryKey: ['memory-status'],
     queryFn: fetchMemoryStatus,
+  });
+}
+
+// ─── Kanban: Goals Board ─────────────────────────────────────
+
+/**
+ * Goals data from goals.md.
+ */
+export function useGoals() {
+  return useQuery({
+    queryKey: ['goals'],
+    queryFn: fetchGoals,
+  });
+}
+
+/**
+ * Goals board column/order state from goals-status.json.
+ */
+export function useGoalsStatus() {
+  return useQuery({
+    queryKey: ['goals-status'],
+    queryFn: fetchGoalsStatus,
+  });
+}
+
+/**
+ * Optimistic mutation for moving goals between columns.
+ */
+export function useUpdateGoalsStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateGoalsStatus,
+    onMutate: async (newData) => {
+      await queryClient.cancelQueries({ queryKey: ['goals-status'] });
+      const prev = queryClient.getQueryData(['goals-status']);
+      queryClient.setQueryData(['goals-status'], newData);
+      return { prev };
+    },
+    onError: (_err, _newData, context) => {
+      if (context?.prev) {
+        queryClient.setQueryData(['goals-status'], context.prev);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['goals-status'] });
+    },
+  });
+}
+
+// ─── Kanban: Content Pipeline ─────────────────────────────────
+
+/**
+ * Content queue items from content-queue.md.
+ */
+export function useContentQueue() {
+  return useQuery({
+    queryKey: ['content-queue'],
+    queryFn: fetchContentQueue,
+  });
+}
+
+/**
+ * Optimistic mutation for moving content items between statuses.
+ */
+export function useUpdateContentQueue() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateContentQueue,
+    onMutate: async (newItems) => {
+      await queryClient.cancelQueries({ queryKey: ['content-queue'] });
+      const prev = queryClient.getQueryData(['content-queue']);
+      queryClient.setQueryData(['content-queue'], newItems);
+      return { prev };
+    },
+    onError: (_err, _newItems, context) => {
+      if (context?.prev) {
+        queryClient.setQueryData(['content-queue'], context.prev);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['content-queue'] });
+    },
   });
 }

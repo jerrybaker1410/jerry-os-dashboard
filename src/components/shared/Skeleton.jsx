@@ -3,8 +3,8 @@
  * Replace <LoadingSpinner> with these for a polished shimmer effect.
  */
 
-function SkeletonPulse({ className = '' }) {
-  return <div className={`animate-skeleton-pulse bg-elevated rounded ${className}`} />;
+function SkeletonPulse({ className = '', style }) {
+  return <div className={`skeleton-shimmer rounded ${className}`} style={style} />;
 }
 
 /** A single metric card skeleton */

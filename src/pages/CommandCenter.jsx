@@ -419,7 +419,7 @@ export default function CommandCenter() {
   const enabledCrons = cronJobs.filter((j) => j.enabled).length;
 
   return (
-    <div className="space-y-6">
+    <div className="page-enter space-y-6">
       <PageHeader
         title="Command Center"
         subtitle="Real-time operations overview"

@@ -186,7 +186,7 @@ export default function CostAnalytics() {
   const historySnapshots = dashData?.historySnapshots || [];
 
   return (
-    <div className="space-y-6">
+    <div className="page-enter space-y-6">
       <PageHeader
         title="Cost Analytics"
         subtitle="OpenRouter spend tracking"

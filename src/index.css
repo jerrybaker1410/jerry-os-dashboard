@@ -26,32 +26,75 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-hover);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #4a4a4a;
-}
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 
-/* Data font utility */
-.font-data {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-}
+/* ─── Data font utility ─────────────────────────────────── */
+.font-data { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
 
-/* Status indicator pulse */
+/* ─── Status indicator pulse ────────────────────────────── */
 @keyframes pulse-green {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
-.animate-pulse-green {
-  animation: pulse-green 2s ease-in-out infinite;
+.animate-pulse-green { animation: pulse-green 2s ease-in-out infinite; }
+
+/* ─── Page enter animation ──────────────────────────────── */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-enter { animation: fadeSlideIn 0.2s ease-out; }
+
+/* ─── Staggered list items ──────────────────────────────── */
+.stagger-item {
+  opacity: 0;
+  animation: fadeSlideIn 0.25s ease-out forwards;
+}
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 40ms; }
+.stagger-item:nth-child(3) { animation-delay: 80ms; }
+.stagger-item:nth-child(4) { animation-delay: 120ms; }
+.stagger-item:nth-child(5) { animation-delay: 160ms; }
+.stagger-item:nth-child(6) { animation-delay: 200ms; }
+.stagger-item:nth-child(7) { animation-delay: 240ms; }
+.stagger-item:nth-child(8) { animation-delay: 280ms; }
+.stagger-item:nth-child(9) { animation-delay: 320ms; }
+.stagger-item:nth-child(10) { animation-delay: 360ms; }
+.stagger-item:nth-child(11) { animation-delay: 400ms; }
+.stagger-item:nth-child(12) { animation-delay: 440ms; }
+
+/* ─── Glassmorphism ─────────────────────────────────────── */
+.glass {
+  background: rgba(36, 36, 36, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Shimmer skeleton ──────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #242424 25%, #2e2e2e 50%, #242424 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ─── Kanban drag animations ────────────────────────────── */
+.kanban-card-dragging {
+  opacity: 0.9;
+  transform: scale(1.03) rotate(1deg);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.kanban-drop-target {
+  border-color: var(--accent-blue) !important;
+  background: rgba(59, 130, 246, 0.05);
 }

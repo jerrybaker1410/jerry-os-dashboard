@@ -657,6 +657,116 @@ app.get('/api/brief', async (req, res) => {
   });
 });
 
+// ─── API: Goals Status (Kanban board state) ─────────────────
+
+const GOALS_STATUS_PATH = path.join(BRAIN_DIR, 'goals', 'goals-status.json');
+
+app.get('/api/goals/status', (req, res) => {
+  try {
+    if (fs.existsSync(GOALS_STATUS_PATH)) {
+      const data = JSON.parse(fs.readFileSync(GOALS_STATUS_PATH, 'utf-8'));
+      return res.json(data);
+    }
+    // Default: all goals start in "planning" column
+    return res.json({ columns: {}, order: {} });
+  } catch (e) {
+    res.json({ columns: {}, order: {}, error: e.message });
+  }
+});
+
+app.post('/api/goals/status', (req, res) => {
+  try {
+    const data = req.body;
+    if (!data) return res.status(400).json({ error: 'Body required' });
+    // Ensure directory exists
+    const dir = path.dirname(GOALS_STATUS_PATH);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(GOALS_STATUS_PATH, JSON.stringify(data, null, 2));
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+// ─── API: Content Queue (Kanban pipeline) ────────────────────
+
+app.get('/api/content-queue', (req, res) => {
+  const queuePath = path.join(BRAIN_DIR, 'pipeline', 'content-queue.md');
+  try {
+    if (!fs.existsSync(queuePath)) {
+      return res.json({ items: [] });
+    }
+    const content = fs.readFileSync(queuePath, 'utf-8');
+
+    // Parse markdown table rows
+    const lines = content.split('\n');
+    const items = [];
+    let inTable = false;
+
+    for (const line of lines) {
+      if (line.startsWith('| ID')) { inTable = true; continue; }
+      if (line.startsWith('|---')) continue;
+      if (inTable && line.startsWith('|')) {
+        const cells = line.split('|').map((c) => c.trim()).filter(Boolean);
+        if (cells.length >= 6 && cells[0] !== '—') {
+          items.push({
+            id: cells[0],
+            type: cells[1],
+            title: cells[2],
+            authorAgent: cells[3],
+            status: cells[4],
+            due: cells[5],
+          });
+        }
+      }
+    }
+
+    res.json({ items });
+  } catch (e) {
+    res.json({ items: [], error: e.message });
+  }
+});
+
+app.post('/api/content-queue', (req, res) => {
+  const queuePath = path.join(BRAIN_DIR, 'pipeline', 'content-queue.md');
+  try {
+    const { items } = req.body || {};
+    if (!items) return res.status(400).json({ error: 'items array required' });
+
+    // Rebuild the markdown file with updated statuses
+    const header = `# Content Pipeline — Current Queue
+
+## Status Legend
+- **drafted** — first draft complete, needs QA
+- **in-qa** — with content-qa agent for review
+- **approved** — passed QA, ready to schedule
+- **scheduled** — in publishing queue with date
+- **published** — live
+
+## Current Queue
+
+| ID | Type | Title/Hook | Author Agent | Status | Due |
+|----|------|-----------|--------------|--------|-----|
+`;
+
+    const rows = items.map((item) =>
+      `| ${item.id} | ${item.type} | ${item.title} | ${item.authorAgent} | ${item.status} | ${item.due} |`
+    ).join('\n');
+
+    const footer = items.length === 0
+      ? '| — | — | — | — | — | — |\n\n*Queue is initially empty. Content-orchestrator and Jerry Baker populate this as the pipeline runs.*'
+      : '';
+
+    const dir = path.dirname(queuePath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(queuePath, header + (rows || footer) + '\n');
+
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 // ─── API: Emergency Stop ─────────────────────────────────────
 
 app.post('/api/emergency/stop', (req, res) => {

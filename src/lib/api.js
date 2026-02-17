@@ -157,3 +157,24 @@ export async function toggleCronJob(jobId, enabled) {
 export async function triggerCronJob(jobId) {
   return apiPost('/cron/run', { jobId });
 }
+
+// ─── Kanban: Goals Status ──────────────────────────────────
+
+export async function fetchGoalsStatus() {
+  return apiFetch('/goals/status');
+}
+
+export async function updateGoalsStatus(data) {
+  return apiPost('/goals/status', data);
+}
+
+// ─── Kanban: Content Queue ─────────────────────────────────
+
+export async function fetchContentQueue() {
+  const data = await apiFetch('/content-queue');
+  return data.items || [];
+}
+
+export async function updateContentQueue(items) {
+  return apiPost('/content-queue', { items });
+}
