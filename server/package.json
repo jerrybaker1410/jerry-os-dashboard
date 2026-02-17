@@ -1,0 +1,12 @@
+{
+  "name": "jerry-os-dashboard-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "history": "node history-logger.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

@@ -10,7 +10,8 @@ import { ArrowUpDown, ArrowUp, ArrowDown, Search, Filter } from 'lucide-react';
 import { useTaskQueue } from '../hooks/useOpenClawAPI';
 import PageHeader from '../components/layout/PageHeader';
 import StatusBadge from '../components/shared/StatusBadge';
-import LoadingSpinner from '../components/shared/LoadingSpinner';
+import { SkeletonTaskQueue } from '../components/shared/Skeleton';
+import EmptyState from '../components/shared/EmptyState';
 import { formatDollars, formatTokens, formatRelativeTime } from '../lib/formatters';
 import { AGENTS } from '../lib/constants';
 
@@ -131,7 +132,7 @@ export default function TaskQueue() {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  if (isLoading) return <div className="flex items-center justify-center h-64"><LoadingSpinner size="lg" /></div>;
+  if (isLoading) return <SkeletonTaskQueue />;
   if (error) return <div className="text-accent-red p-4">Error loading tasks: {error.message}</div>;
 
   const statuses = ['all', 'queued', 'running', 'completed', 'failed', 'waiting'];
@@ -214,8 +215,12 @@ export default function TaskQueue() {
               ))}
               {table.getRowModel().rows.length === 0 && (
                 <tr>
-                  <td colSpan={columns.length} className="px-4 py-8 text-center text-text-muted text-sm">
-                    No tasks found
+                  <td colSpan={columns.length}>
+                    <EmptyState
+                      icon={Search}
+                      title="No tasks found"
+                      subtitle={globalFilter ? `No results for "${globalFilter}"` : 'Tasks from cron jobs and agents will appear here'}
+                    />
                   </td>
                 </tr>
               )}

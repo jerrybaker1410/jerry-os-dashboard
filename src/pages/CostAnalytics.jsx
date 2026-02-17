@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend,
+  Tooltip, ResponsiveContainer,
 } from 'recharts';
-import { DollarSign, TrendingUp, Cpu, CreditCard } from 'lucide-react';
+import { DollarSign, TrendingUp, Cpu, Link2Off } from 'lucide-react';
 import { useCostData } from '../hooks/useOpenRouterCosts';
 import { useDashboardData } from '../hooks/useOpenClawAPI';
 import PageHeader from '../components/layout/PageHeader';
 import MetricCard from '../components/shared/MetricCard';
-import LoadingSpinner from '../components/shared/LoadingSpinner';
+import { SkeletonCostAnalytics } from '../components/shared/Skeleton';
+import { CopyValue } from '../components/shared/CopyButton';
 import { formatDollars, formatTokens } from '../lib/formatters';
-import { AGENTS } from '../lib/constants';
 
 const CHART_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e', '#eab308', '#ef4444', '#ec4899'];
 
@@ -21,23 +21,37 @@ const CustomTooltip = ({ active, payload, label }) => {
       <p className="text-xs text-text-muted mb-1">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} className="text-sm font-data" style={{ color: entry.color }}>
-          {entry.name}: ${typeof entry.value === 'number' ? entry.value.toFixed(3) : entry.value}
+          {entry.name}: ${typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
         </p>
       ))}
     </div>
   );
 };
 
-function DailySpendChart({ data, range }) {
-  const slicedData = range === '7d' ? data.slice(-7) : range === '14d' ? data.slice(-14) : data;
+function DailySpendChart({ snapshots, range }) {
+  const sliced = range === '7d' ? snapshots.slice(-7) : range === '14d' ? snapshots.slice(-14) : snapshots;
+
+  const data = sliced.map((s) => ({
+    date: s.date,
+    daily: s.cost?.usageDaily || 0,
+  }));
+
+  if (data.length === 0) {
+    return (
+      <div className="bg-surface border border-border-default rounded-lg p-4">
+        <h3 className="text-sm font-medium text-text-primary mb-4">Daily Spend</h3>
+        <div className="flex items-center justify-center h-60">
+          <p className="text-sm text-text-muted">No history data. Run <code className="bg-elevated px-1 rounded">history-logger.js</code> to populate charts.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-surface border border-border-default rounded-lg p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-text-primary">Daily Spend</h3>
-      </div>
+      <h3 className="text-sm font-medium text-text-primary mb-4">Daily Spend</h3>
       <ResponsiveContainer width="100%" height={240}>
-        <AreaChart data={slicedData}>
+        <AreaChart data={data}>
           <defs>
             <linearGradient id="costGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
@@ -48,120 +62,96 @@ function DailySpendChart({ data, range }) {
           <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
           <YAxis tick={{ fill: '#666', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
           <Tooltip content={<CustomTooltip />} />
-          <Area type="monotone" dataKey="total" stroke="#3b82f6" fill="url(#costGradient)" strokeWidth={2} name="Cost" />
+          <Area type="monotone" dataKey="daily" stroke="#3b82f6" fill="url(#costGradient)" strokeWidth={2} name="Daily Cost" />
         </AreaChart>
       </ResponsiveContainer>
     </div>
   );
 }
 
-function ModelBreakdownChart({ models }) {
-  const chartData = models.map((m, i) => ({
-    name: m.name,
-    cost: m.totalCost,
-    tokens: m.totalTokens,
-    fill: CHART_COLORS[i % CHART_COLORS.length],
+function SessionsOverTimeChart({ snapshots, range }) {
+  const sliced = range === '7d' ? snapshots.slice(-7) : range === '14d' ? snapshots.slice(-14) : snapshots;
+
+  const data = sliced.map((s) => ({
+    date: s.date,
+    sessions: s.sessions?.total || 0,
+    cron: s.sessions?.cron || 0,
+    subagent: s.sessions?.subagent || 0,
   }));
+
+  if (data.length === 0) return null;
 
   return (
     <div className="bg-surface border border-border-default rounded-lg p-4">
-      <h3 className="text-sm font-medium text-text-primary mb-4">Cost by Model</h3>
+      <h3 className="text-sm font-medium text-text-primary mb-4">Sessions Over Time</h3>
       <ResponsiveContainer width="100%" height={240}>
-        <BarChart data={chartData} layout="vertical">
+        <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
-          <XAxis type="number" tick={{ fill: '#666', fontSize: 11 }} tickFormatter={(v) => `$${v}`} />
-          <YAxis type="category" dataKey="name" tick={{ fill: '#999', fontSize: 11 }} width={90} />
+          <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 11 }} tickFormatter={(v) => v.slice(5)} />
+          <YAxis tick={{ fill: '#666', fontSize: 11 }} />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="cost" name="Cost" radius={[0, 4, 4, 0]}>
-            {chartData.map((entry, i) => (
-              <Cell key={i} fill={entry.fill} />
-            ))}
-          </Bar>
+          <Bar dataKey="sessions" name="Total Sessions" fill="#3b82f6" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
   );
 }
 
-function AgentCostChart({ agentStats }) {
-  // agentStats is an array
-  const data = (Array.isArray(agentStats) ? agentStats : []).map((stats) => ({
-    name: stats.name,
-    value: stats.costThisMonth || 0,
-    emoji: stats.emoji,
-  })).filter((d) => d.value > 0);
+function ModelUsageFromSessions({ sessions }) {
+  const modelMap = {};
+  (sessions || []).forEach((s) => {
+    if (s.model) {
+      if (!modelMap[s.model]) {
+        modelMap[s.model] = { name: s.model, sessions: 0, tokens: 0 };
+      }
+      modelMap[s.model].sessions += 1;
+      modelMap[s.model].tokens += s.totalTokens || 0;
+    }
+  });
 
-  return (
-    <div className="bg-surface border border-border-default rounded-lg p-4">
-      <h3 className="text-sm font-medium text-text-primary mb-4">Monthly Cost by Agent</h3>
-      <ResponsiveContainer width="100%" height={240}>
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            innerRadius={55}
-            outerRadius={90}
-            paddingAngle={3}
-            dataKey="value"
-            nameKey="name"
-          >
-            {data.map((_, i) => (
-              <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip
-            content={({ active, payload }) => {
-              if (!active || !payload?.length) return null;
-              return (
-                <div className="bg-elevated border border-border-default rounded-md px-3 py-2 shadow-lg">
-                  <p className="text-sm text-text-primary">{payload[0].name}</p>
-                  <p className="text-sm font-data text-accent-blue">${payload[0].value.toFixed(2)}</p>
-                </div>
-              );
-            }}
-          />
-          <Legend
-            formatter={(value) => <span className="text-xs text-text-secondary">{value}</span>}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
+  const models = Object.values(modelMap).sort((a, b) => b.sessions - a.sessions);
 
-function ModelTable({ models }) {
+  if (models.length === 0) {
+    return (
+      <div className="bg-surface border border-border-default rounded-lg p-4">
+        <h3 className="text-sm font-medium text-text-primary mb-4">Model Usage</h3>
+        <p className="text-sm text-text-muted text-center py-6">No session data available</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-surface border border-border-default rounded-lg">
       <div className="p-4 border-b border-border-default">
-        <h3 className="text-sm font-medium text-text-primary">Model Usage Details</h3>
+        <h3 className="text-sm font-medium text-text-primary">Model Usage (Current Sessions)</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-border-default">
               <th className="px-4 py-2.5 text-left text-xs font-medium text-text-muted uppercase">Model</th>
-              <th className="px-4 py-2.5 text-right text-xs font-medium text-text-muted uppercase">Requests</th>
+              <th className="px-4 py-2.5 text-right text-xs font-medium text-text-muted uppercase">Sessions</th>
               <th className="px-4 py-2.5 text-right text-xs font-medium text-text-muted uppercase">Tokens</th>
-              <th className="px-4 py-2.5 text-right text-xs font-medium text-text-muted uppercase">Cost</th>
-              <th className="px-4 py-2.5 text-right text-xs font-medium text-text-muted uppercase">% of Total</th>
+              <th className="px-4 py-2.5 text-right text-xs font-medium text-text-muted uppercase">% of Sessions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border-default">
             {models.map((model, i) => {
-              const totalCost = models.reduce((s, m) => s + m.totalCost, 0);
-              const pct = totalCost > 0 ? (model.totalCost / totalCost) * 100 : 0;
+              const totalSessions = models.reduce((s, m) => s + m.sessions, 0);
+              const pct = totalSessions > 0 ? (model.sessions / totalSessions) * 100 : 0;
               return (
                 <tr key={i} className="hover:bg-elevated/50 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }} />
-                      <span className="text-sm text-text-primary">{model.name}</span>
+                      <span
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }}
+                      />
+                      <CopyValue text={model.name} />
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-right text-sm text-text-secondary font-data">{model.requests}</td>
-                  <td className="px-4 py-3 text-right text-sm text-text-secondary font-data">{formatTokens(model.totalTokens)}</td>
-                  <td className="px-4 py-3 text-right text-sm text-text-primary font-data">${formatDollars(model.totalCost)}</td>
+                  <td className="px-4 py-3 text-right text-sm text-text-secondary font-data">{model.sessions}</td>
+                  <td className="px-4 py-3 text-right text-sm text-text-secondary font-data">{formatTokens(model.tokens)}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <div className="w-16 h-1.5 bg-elevated rounded-full overflow-hidden">
@@ -189,16 +179,17 @@ export default function CostAnalytics() {
   const [dateRange, setDateRange] = useState('30d');
 
   const isLoading = costLoading || dashLoading;
-  if (isLoading) return <div className="flex items-center justify-center h-64"><LoadingSpinner size="lg" /></div>;
+  if (isLoading) return <SkeletonCostAnalytics />;
 
   const costs = costData || {};
-  const agentStats = dashData?.agentStats || [];
+  const sessions = dashData?.sessions || [];
+  const historySnapshots = dashData?.historySnapshots || [];
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Cost Analytics"
-        subtitle="OpenRouter spend tracking and optimization"
+        subtitle="OpenRouter spend tracking"
         onRefresh={refetchCost}
         actions={
           <div className="flex items-center gap-1 bg-surface border border-border-default rounded-md p-0.5">
@@ -219,35 +210,46 @@ export default function CostAnalytics() {
         }
       />
 
+      {/* Not connected banner */}
+      {!costs.connected && (
+        <div className="bg-surface border border-yellow-500/30 rounded-lg p-4 flex items-center gap-3">
+          <Link2Off size={18} className="text-yellow-500 shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-text-primary">Connect OpenRouter</p>
+            <p className="text-xs text-text-muted">
+              Add an OpenRouter API key to your OpenClaw config to see real cost data.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           label="This Month"
-          value={`$${formatDollars(costs.totalThisMonth)}`}
-          subValue={`vs $${formatDollars(costs.totalLastMonth)} last month`}
-          trend={costs.totalThisMonth > costs.totalLastMonth ? 'up' : 'down'}
+          value={costs.connected ? `$${formatDollars(costs.usageMonthly)}` : '—'}
+          subValue={costs.connected ? 'OpenRouter usage' : 'Not connected'}
           icon={DollarSign}
           accentColor="accent-blue"
         />
         <MetricCard
-          label="Daily Average"
-          value={`$${formatDollars(costs.avgDailyCost)}`}
-          subValue="per day"
+          label="Today"
+          value={costs.connected ? `$${formatDollars(costs.usageDaily)}` : '—'}
+          subValue="daily spend"
           icon={TrendingUp}
           accentColor="accent-green"
         />
         <MetricCard
-          label="Credit Balance"
-          value={`$${formatDollars(costs.creditBalance)}`}
-          subValue={`of $${costs.creditLimit} limit`}
-          trend={(costs.creditBalance || 0) > 20 ? 'up' : 'down'}
-          icon={CreditCard}
+          label="This Week"
+          value={costs.connected ? `$${formatDollars(costs.usageWeekly)}` : '—'}
+          subValue="weekly spend"
+          icon={DollarSign}
           accentColor="accent-yellow"
         />
         <MetricCard
-          label="Top Model Cost"
-          value={`$${formatDollars(costs.topModels?.[0]?.totalCost || 0)}`}
-          subValue={costs.topModels?.[0]?.name || '—'}
+          label="All Time"
+          value={costs.connected ? `$${formatDollars(costs.usage)}` : '—'}
+          subValue={costs.limit ? `of $${formatDollars(costs.limit)} limit` : 'total usage'}
           icon={Cpu}
           accentColor="accent-blue"
         />
@@ -255,17 +257,12 @@ export default function CostAnalytics() {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <DailySpendChart data={costs.dailyCosts || []} range={dateRange} />
-        <ModelBreakdownChart models={costs.topModels || []} />
+        <DailySpendChart snapshots={historySnapshots} range={dateRange} />
+        <SessionsOverTimeChart snapshots={historySnapshots} range={dateRange} />
       </div>
 
-      {/* Bottom Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
-          <ModelTable models={costs.topModels || []} />
-        </div>
-        <AgentCostChart agentStats={agentStats} />
-      </div>
+      {/* Model Table */}
+      <ModelUsageFromSessions sessions={sessions} />
     </div>
   );
 }

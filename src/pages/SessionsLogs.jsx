@@ -3,7 +3,10 @@ import { Terminal, X, ChevronRight } from 'lucide-react';
 import { useSessions, useSessionLogs } from '../hooks/useOpenClawAPI';
 import PageHeader from '../components/layout/PageHeader';
 import StatusBadge from '../components/shared/StatusBadge';
-import LoadingSpinner from '../components/shared/LoadingSpinner';
+import SkeletonPulse from '../components/shared/Skeleton';
+import { SkeletonSessionsLogs } from '../components/shared/Skeleton';
+import { CopyValue } from '../components/shared/CopyButton';
+import EmptyState from '../components/shared/EmptyState';
 import { formatDollars, formatTokens, formatRelativeTime, formatTimestamp, formatDuration } from '../lib/formatters';
 import { AGENTS } from '../lib/constants';
 
@@ -61,7 +64,7 @@ function SessionDetail({ session }) {
       </div>
       <div>
         <p className="text-[10px] text-text-muted uppercase mb-1">Model</p>
-        <p className="text-sm text-text-primary font-data">{session.model}</p>
+        <CopyValue text={session.model} />
         <p className="text-[10px] text-text-muted">{duration}</p>
       </div>
       <div>
@@ -103,8 +106,14 @@ function LogViewer({ sessionId }) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-48">
-        <LoadingSpinner />
+      <div className="bg-[#0a0a0a] rounded-lg border border-border-default p-4 space-y-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="flex gap-2">
+            <SkeletonPulse className="h-3 w-16" />
+            <SkeletonPulse className="h-3 w-10" />
+            <SkeletonPulse className="h-3 flex-1" />
+          </div>
+        ))}
       </div>
     );
   }
@@ -127,7 +136,7 @@ function LogViewer({ sessionId }) {
         </div>
         <span className="text-[10px] text-text-muted">{logs.length} entries</span>
       </div>
-      <div className="max-h-[360px] overflow-y-auto font-mono text-xs leading-relaxed p-3 space-y-0.5">
+      <div className="max-h-[360px] overflow-y-auto font-mono text-xs leading-relaxed p-3 space-y-0.5" role="log" aria-live="polite">
         {logs.map((log, i) => (
           <div key={i} className="flex gap-2 py-0.5 hover:bg-elevated/20 rounded px-1 -mx-1">
             <span className="text-text-muted shrink-0 w-20">{formatTimestamp(log.ts)}</span>
@@ -148,7 +157,7 @@ export default function SessionsLogs() {
   const [selectedId, setSelectedId] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
 
-  if (isLoading) return <div className="flex items-center justify-center h-64"><LoadingSpinner size="lg" /></div>;
+  if (isLoading) return <SkeletonSessionsLogs />;
   if (error) return <div className="text-accent-red p-4">Error loading sessions: {error.message}</div>;
 
   const sessionList = Array.isArray(sessions) ? sessions : [];
@@ -171,6 +180,7 @@ export default function SessionsLogs() {
             {statuses.map((s) => (
               <button
                 key={s}
+                type="button"
                 onClick={() => setStatusFilter(s)}
                 className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                   statusFilter === s
@@ -201,7 +211,11 @@ export default function SessionsLogs() {
               />
             ))}
             {filtered.length === 0 && (
-              <div className="p-6 text-center text-text-muted text-sm">No sessions found</div>
+              <EmptyState
+                icon={Terminal}
+                title="No sessions found"
+                subtitle={statusFilter !== 'all' ? `No ${statusFilter} sessions` : 'Sessions will appear here when agents run'}
+              />
             )}
           </div>
         </div>
@@ -213,8 +227,10 @@ export default function SessionsLogs() {
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium text-text-primary truncate">{selected.task}</h3>
                 <button
+                  type="button"
                   onClick={() => setSelectedId(null)}
                   className="text-text-muted hover:text-text-secondary transition-colors"
+                  aria-label="Close session details"
                 >
                   <X size={16} />
                 </button>

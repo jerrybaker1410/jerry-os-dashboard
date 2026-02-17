@@ -1,127 +1,159 @@
-// API client — currently returns mock data
-// When connecting to real OpenClaw/OpenRouter, swap these implementations
+// ═══════════════════════════════════════════════════════════════
+// API Client — Jerry OS Dashboard
+// Fetches REAL data from the backend API server (Express on :3001)
+// NO mock data, NO fallbacks — errors propagate to the UI
+// ═══════════════════════════════════════════════════════════════
 
-import {
-  mockSessions,
-  mockTasks,
-  mockCostData,
-  mockAgentStats,
-  mockRecentActivity,
-  mockSessionLogs,
-} from '../data/mockData';
+const API_BASE = import.meta.env.VITE_API_BASE || `${import.meta.env.BASE_URL}api`;
 
-const MOCK_MODE = true;
-
-// Simulates API delay
-const delay = (ms = 300) => new Promise((r) => setTimeout(r, ms));
+async function apiFetch(path) {
+  const res = await fetch(`${API_BASE}${path}`);
+  if (!res.ok) {
+    throw new Error(`API ${path}: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
 
 // ─── OpenClaw Gateway ───────────────────────────────────────────
 
 export async function fetchSessions() {
-  if (MOCK_MODE) {
-    await delay(200);
-    return mockSessions;
-  }
-  const res = await fetch('/api/sessions_list');
-  return res.json();
-}
-
-export async function fetchSessionStatus(sessionId) {
-  if (MOCK_MODE) {
-    await delay(150);
-    return mockSessions.find((s) => s.id === sessionId) || null;
-  }
-  const res = await fetch(`/api/session_status?id=${sessionId}`);
-  return res.json();
+  const data = await apiFetch('/sessions_list');
+  return data.sessions || [];
 }
 
 export async function fetchCronJobs() {
-  if (MOCK_MODE) {
-    await delay(200);
-    return mockTasks.filter((t) => t.type === 'cron');
-  }
-  const res = await fetch('/api/cron/list');
-  return res.json();
-}
-
-export async function fetchTaskQueue() {
-  if (MOCK_MODE) {
-    await delay(200);
-    return mockTasks;
-  }
-  const [crons, sessions] = await Promise.all([fetchCronJobs(), fetchSessions()]);
-  return [...crons, ...sessions.flatMap((s) => s.tasks || [])];
+  const data = await apiFetch('/cron/list');
+  return data.jobs || [];
 }
 
 // ─── OpenRouter / Cost Data ─────────────────────────────────────
 
 export async function fetchCostData() {
-  if (MOCK_MODE) {
-    await delay(250);
-    return mockCostData;
-  }
-  const [keyRes, genRes] = await Promise.all([
-    fetch('https://openrouter.ai/api/v1/auth/key', {
-      headers: { Authorization: `Bearer ${getApiKey()}` },
-    }),
-    fetch('https://openrouter.ai/api/v1/generation?limit=100', {
-      headers: { Authorization: `Bearer ${getApiKey()}` },
-    }),
-  ]);
-  return { key: await keyRes.json(), generations: await genRes.json() };
+  const data = await apiFetch('/openrouter/usage');
+  return data;
+}
+
+// ─── Activity Feed (derived from real sessions + cron) ──────────
+
+export async function fetchActivity() {
+  const data = await apiFetch('/activity');
+  return data.activities || [];
+}
+
+// ─── History Snapshots (for charts) ─────────────────────────────
+
+export async function fetchHistory() {
+  const data = await apiFetch('/history');
+  return data.snapshots || [];
+}
+
+// ─── Config ─────────────────────────────────────────────────────
+
+export async function fetchConfig() {
+  return apiFetch('/config');
 }
 
 // ─── Aggregated Dashboard Data ──────────────────────────────────
 
 export async function fetchDashboardData() {
-  if (MOCK_MODE) {
-    await delay(300);
-    return {
-      sessions: mockSessions,
-      tasks: mockTasks,
-      costs: mockCostData,
-      agentStats: mockAgentStats,
-      recentActivity: mockRecentActivity,
-    };
-  }
-  const [sessions, tasks, costs] = await Promise.all([
-    fetchSessions(),
-    fetchCronJobs(),
-    fetchCostData(),
-  ]);
-  return { sessions, tasks, costs, agentStats: [], recentActivity: [] };
+  const data = await apiFetch('/dashboard');
+  return data;
 }
+
+// ─── Session Logs ───────────────────────────────────────────────
+// OpenClaw doesn't expose per-session logs via CLI yet,
+// so we return empty and show a message in the UI.
 
 export async function fetchSessionLogs(sessionId) {
-  if (MOCK_MODE) {
-    await delay(200);
-    return mockSessionLogs[sessionId] || [];
-  }
-  const res = await fetch(`/api/session_logs?id=${sessionId}`);
-  return res.json();
+  // No real endpoint available yet
+  return [];
 }
 
-// ─── Gateway Status (for AgentProfiles) ─────────────────────────
+// ─── Gateway Status ─────────────────────────────────────────────
 
 export async function fetchStatus() {
-  if (MOCK_MODE) {
-    await delay(200);
-    return {
-      heartbeat: {
-        agents: mockAgentStats.map((a) => ({
-          agentId: a.id,
-          enabled: a.status === 'active',
-          every: '30m',
-        })),
-      },
-    };
-  }
-  const res = await fetch('/api/status');
+  const data = await apiFetch('/dashboard');
+  return {
+    sessions: data.sessions || [],
+    cronJobs: data.cronJobs || [],
+  };
+}
+
+// ─── Cron Run History ───────────────────────────────────────
+
+export async function fetchCronRuns(jobId, limit = 10) {
+  const data = await apiFetch(`/cron/runs?jobId=${encodeURIComponent(jobId)}&limit=${limit}`);
+  return data.runs || [];
+}
+
+// ─── Memory Search ──────────────────────────────────────────
+
+export async function fetchMemorySearch(query, limit = 20) {
+  const data = await apiFetch(`/memory/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+  return data.results || [];
+}
+
+// ─── Memory Content ─────────────────────────────────────────
+
+export async function fetchMemoryContent(filePath) {
+  const data = await apiFetch(`/memory/content?path=${encodeURIComponent(filePath)}`);
+  return data;
+}
+
+// ─── Goals ──────────────────────────────────────────────────
+
+export async function fetchGoals() {
+  const data = await apiFetch('/goals');
+  return data;
+}
+
+// ─── Agent Fleet ────────────────────────────────────────────
+
+export async function fetchAgentFleet() {
+  const data = await apiFetch('/agents');
+  return data.agents || [];
+}
+
+// ─── Gateway Health ─────────────────────────────────────────
+
+export async function fetchGatewayHealth() {
+  return apiFetch('/gateway/health');
+}
+
+// ─── Channels Status ────────────────────────────────────────
+
+export async function fetchChannels() {
+  return apiFetch('/channels');
+}
+
+// ─── Morning Brief ──────────────────────────────────────────
+
+export async function fetchBrief() {
+  return apiFetch('/brief');
+}
+
+// ─── Memory Status ──────────────────────────────────────────
+
+export async function fetchMemoryStatus() {
+  return apiFetch('/memory/status');
+}
+
+// ─── Cron Toggle ────────────────────────────────────────────
+
+async function apiPost(path, body) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`API ${path}: ${res.status}`);
   return res.json();
 }
 
-// ─── Helpers ────────────────────────────────────────────────────
+export async function toggleCronJob(jobId, enabled) {
+  return apiPost('/cron/toggle', { jobId, enabled });
+}
 
-function getApiKey() {
-  return localStorage.getItem('openrouter_key') || '';
+export async function triggerCronJob(jobId) {
+  return apiPost('/cron/run', { jobId });
 }
